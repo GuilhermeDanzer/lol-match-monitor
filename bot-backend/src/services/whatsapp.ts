@@ -1,34 +1,33 @@
-import {
-  getPersistentDataDir,
-  getWhatsAppAuthPath,
-  getWhatsAppCachePath,
-} from "@/lib/paths";
-import fs from "fs/promises";
-import type { Chat, Message } from "whatsapp-web.js";
-import { Client, LocalAuth } from "whatsapp-web.js";
+import { getWhatsAppAuthPath } from "@/lib/paths";
 import {
   handleWhatsAppCommand,
   isCommandMessage,
 } from "@/services/whatsappCommands";
+import { Boom } from "@hapi/boom";
+import fs from "fs/promises";
+import makeWASocket, {
+  Browsers,
+  DisconnectReason,
+  fetchLatestBaileysVersion,
+  makeCacheableSignalKeyStore,
+  useMultiFileAuthState,
+  type proto,
+  type WASocket,
+} from "@whiskeysockets/baileys";
+import P from "pino";
 
-let client: Client | null = null;
+let sock: WASocket | null = null;
+let saveCreds: (() => Promise<void>) | null = null;
 let isReady = false;
 let isPairing = false;
-let isAuthenticated = false;
+let isConnecting = false;
 let currentQrString: string | null = null;
 let currentQrId = 0;
 let currentPairingCode: string | null = null;
+let pairingCodeRequested = false;
 let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
-let initGeneration = 0;
 
-const PUPPETEER_ARGS = [
-  "--no-sandbox",
-  "--disable-setuid-sandbox",
-  "--disable-dev-shm-usage",
-  "--disable-gpu",
-  "--disable-software-rasterizer",
-  "--no-zygote",
-];
+const logger = P({ level: "silent" });
 
 export function getCurrentQrString(): string | null {
   return currentQrString;
@@ -67,6 +66,7 @@ export function getWhatsAppStatus(): {
   groupIdConfigured: boolean;
   authPath: string;
   qrId: number;
+  engine: string;
 } {
   const phone = normalizePhoneNumber(process.env.WHATSAPP_PHONE_NUMBER);
   return {
@@ -79,6 +79,7 @@ export function getWhatsAppStatus(): {
     groupIdConfigured: Boolean(process.env.WHATSAPP_GROUP_ID?.trim()),
     authPath: getWhatsAppAuthPath(),
     qrId: currentQrId,
+    engine: "baileys",
   };
 }
 
@@ -89,288 +90,247 @@ function cancelReconnect(): void {
   }
 }
 
-function getCommandPrefix(): string {
-  return process.env.WHATSAPP_COMMAND_PREFIX ?? "!";
+function getMessageBody(message: proto.IMessage | null | undefined): string | null {
+  if (!message) return null;
+  if (message.conversation) return message.conversation;
+  if (message.extendedTextMessage?.text) return message.extendedTextMessage.text;
+  if (message.imageMessage?.caption) return message.imageMessage.caption;
+  return null;
 }
 
-function isTargetGroup(msg: Message, chat: Chat): boolean {
+function isTargetGroup(jid: string | null | undefined): boolean {
+  if (!jid?.endsWith("@g.us")) return false;
+
   const configuredId = process.env.WHATSAPP_GROUP_ID?.trim();
   if (!configuredId) {
     console.warn(
       "[WhatsApp] WHATSAPP_GROUP_ID nao configurado — comandos em qualquer grupo.",
     );
-    return chat.isGroup;
+    return true;
   }
 
-  const chatId = chat.id._serialized;
-  return (
-    chat.isGroup &&
-    (chatId === configuredId || msg.from === configuredId)
-  );
-}
-
-async function replyInChat(msg: Message, chat: Chat, text: string): Promise<void> {
-  try {
-    await msg.reply(text);
-  } catch {
-    if (client) {
-      await client.sendMessage(chat.id._serialized, text);
-    }
-  }
-}
-
-async function onIncomingMessage(msg: Message): Promise<void> {
-  const body = msg.body?.trim();
-  if (!body) return;
-
-  const chat = await msg.getChat();
-  if (!chat.isGroup) return;
-
-  if (!isTargetGroup(msg, chat)) {
-    return;
-  }
-
-  if (msg.fromMe && !isCommandMessage(body)) {
-    return;
-  }
-
-  if (!isCommandMessage(body)) {
-    return;
-  }
-
-  console.log(
-    `[WhatsApp] Comando recebido: "${body}" | grupo: ${chat.name ?? chat.id._serialized}`,
-  );
-
-  await handleWhatsAppCommand(body, (text) => replyInChat(msg, chat, text));
+  return jid === configuredId;
 }
 
 async function clearWhatsAppSessionFiles(): Promise<void> {
-  const authPath = getWhatsAppAuthPath();
-  const cachePath = getWhatsAppCachePath();
-  await fs.rm(authPath, { recursive: true, force: true });
-  await fs.rm(cachePath, { recursive: true, force: true });
-  console.log(`[WhatsApp] Sessao limpa em ${getPersistentDataDir()}`);
+  await fs.rm(getWhatsAppAuthPath(), { recursive: true, force: true });
+  console.log(`[WhatsApp] Sessao limpa em ${getWhatsAppAuthPath()}`);
 }
 
-async function destroyClientSafely(): Promise<void> {
-  const active = client;
-  client = null;
-  if (!active) return;
-
-  try {
-    await active.destroy();
-  } catch (error) {
-    const message = error instanceof Error ? error.message : String(error);
-    console.warn("[WhatsApp] destroy ignorado:", message);
-  }
-}
-
-function scheduleReconnect(
-  reason: string,
-  options?: { resetSession?: boolean; delayMs?: number },
-): void {
+function scheduleReconnect(reason: string, delayMs = 15_000): void {
   cancelReconnect();
-
-  const delayMs = options?.delayMs ?? 20_000;
-  const resetSession = options?.resetSession ?? false;
-
-  console.warn(
-    `[WhatsApp] Reconectando em ${delayMs / 1000}s (${reason}, reset=${resetSession})...`,
-  );
-
+  console.warn(`[WhatsApp] Reconectando em ${delayMs / 1000}s (${reason})...`);
   reconnectTimer = setTimeout(() => {
     reconnectTimer = null;
-    void (async () => {
-      const generation = ++initGeneration;
-      await destroyClientSafely();
-
-      isReady = false;
-      currentQrString = null;
-
-      if (resetSession) {
-        await clearWhatsAppSessionFiles();
-        isPairing = false;
-        isAuthenticated = false;
-      }
-
-      if (generation !== initGeneration) return;
-      initWhatsAppClient();
-    })();
+    void startWhatsApp();
   }, delayMs);
 }
 
-function createClient(): Client {
-  const authPath = getWhatsAppAuthPath();
-  const executablePath = process.env.PUPPETEER_EXECUTABLE_PATH?.trim();
-  const phone = normalizePhoneNumber(process.env.WHATSAPP_PHONE_NUMBER);
+async function handleIncomingMessage(msg: proto.IWebMessageInfo): Promise<void> {
+  const jid = msg.key.remoteJid;
+  if (!jid || !isTargetGroup(jid)) return;
 
-  return new Client({
-    authStrategy: new LocalAuth({ dataPath: authPath }),
-    takeoverOnConflict: true,
-    bypassCSP: true,
-    authTimeoutMs: 120_000,
-    ...(phone
-      ? {
-          pairWithPhoneNumber: {
-            phoneNumber: phone,
-            showNotification: true,
-            intervalMs: 180_000,
-          },
-        }
-      : {}),
-    puppeteer: {
-      headless: true,
-      ...(executablePath ? { executablePath } : {}),
-      args: PUPPETEER_ARGS,
-    },
+  const body = getMessageBody(msg.message)?.trim();
+  if (!body || !isCommandMessage(body)) return;
+
+  if (msg.key.fromMe && !isCommandMessage(body)) return;
+
+  console.log(`[WhatsApp] Comando recebido: "${body}" | grupo: ${jid}`);
+
+  await handleWhatsAppCommand(body, async (text) => {
+    if (!sock) return;
+    await sock.sendMessage(jid, { text }, { quoted: msg });
   });
 }
 
-function wireClientEvents(waClient: Client): void {
-  waClient.on("code", (code) => {
+async function requestPairingCodeOnce(
+  socket: WASocket,
+  phone: string,
+): Promise<void> {
+  if (pairingCodeRequested || socket.authState.creds.registered) return;
+
+  pairingCodeRequested = true;
+  isPairing = true;
+
+  try {
+    const code = await socket.requestPairingCode(phone);
     currentPairingCode = code;
-    isPairing = true;
-    cancelReconnect();
     console.log(`[WhatsApp] Codigo de pareamento: ${code} — abra /api/qr`);
-  });
-
-  waClient.on("qr", (qr) => {
-    isPairing = false;
-    isAuthenticated = false;
-    currentQrString = qr;
-    currentQrId += 1;
-    if (currentQrId === 1 || currentQrId % 5 === 0) {
-      console.log(
-        `[WhatsApp] QR #${currentQrId} pronto — escaneie em /api/qr`,
-      );
-    }
-  });
-
-  waClient.on("loading_screen", (percent, message) => {
-    isPairing = true;
-    cancelReconnect();
-    console.log(`[WhatsApp] Carregando ${percent}% — ${message}`);
-  });
-
-  waClient.on("ready", () => {
-    isReady = true;
-    isPairing = false;
-    isAuthenticated = false;
-    currentQrString = null;
-    cancelReconnect();
-
-    const prefix = getCommandPrefix();
-    const groupId = process.env.WHATSAPP_GROUP_ID ?? "(nao configurado)";
-    console.log("✅ WhatsApp conectado!");
-    console.log(`💬 Grupo monitorado: ${groupId}`);
-    console.log(
-      `💬 Comandos: ${prefix}status | ${prefix}historico | ${prefix}jornada | ${prefix}site | ${prefix}ajuda`,
-    );
-  });
-
-  waClient.on("message_create", (msg) => {
-    void onIncomingMessage(msg);
-  });
-
-  waClient.on("authenticated", () => {
-    isAuthenticated = true;
-    isPairing = true;
-    cancelReconnect();
-    console.log("🔐 WhatsApp autenticado com sucesso.");
-  });
-
-  waClient.on("auth_failure", (msg) => {
-    console.error("❌ Falha na autenticacao do WhatsApp:", msg);
-    isReady = false;
-    isPairing = false;
-    isAuthenticated = false;
-    currentQrString = null;
-    scheduleReconnect("auth_failure", { resetSession: true, delayMs: 30_000 });
-  });
-
-  waClient.on("disconnected", (reason) => {
-    console.warn("⚠️ WhatsApp desconectado:", reason);
-    const wasReady = isReady;
-    isReady = false;
-    currentQrString = null;
-
-    if (wasReady) {
-      isPairing = false;
-      isAuthenticated = false;
-      scheduleReconnect(String(reason), { resetSession: false, delayMs: 15_000 });
-      return;
-    }
-
-    if (isPairing || isAuthenticated) {
-      console.log(
-        "[WhatsApp] Desconexao durante pareamento — mantendo sessao salva, reconectando...",
-      );
-      isPairing = true;
-      scheduleReconnect(String(reason), { resetSession: false, delayMs: 15_000 });
-      return;
-    }
-
-    scheduleReconnect(String(reason), { resetSession: false, delayMs: 30_000 });
-  });
+  } catch (error) {
+    pairingCodeRequested = false;
+    const message = error instanceof Error ? error.message : String(error);
+    console.error("[WhatsApp] Falha ao gerar codigo:", message);
+  }
 }
 
-/**
- * Inicializa o cliente WhatsApp com LocalAuth (sessao em disco).
- * QR Code: GET /api/qr no navegador.
- */
-export function initWhatsAppClient(): Client {
-  if (client) return client;
+async function startWhatsApp(): Promise<void> {
+  if (isConnecting || isReady) return;
+  isConnecting = true;
 
   const authPath = getWhatsAppAuthPath();
   const phone = normalizePhoneNumber(process.env.WHATSAPP_PHONE_NUMBER);
-  console.log(`[WhatsApp] Sessao LocalAuth: ${authPath}`);
-  if (phone) {
-    console.log(
-      `[WhatsApp] Modo codigo (${maskPhoneNumber(phone)}) — aguarde codigo em /api/qr`,
-    );
-  }
 
+  try {
+    await fs.mkdir(authPath, { recursive: true });
+
+    const { state, saveCreds: persistCreds } =
+      await useMultiFileAuthState(authPath);
+    saveCreds = persistCreds;
+
+    const { version } = await fetchLatestBaileysVersion();
+
+    const socket = makeWASocket({
+      version,
+      auth: {
+        creds: state.creds,
+        keys: makeCacheableSignalKeyStore(state.keys, logger),
+      },
+      logger,
+      browser: Browsers.ubuntu("LoL Match Monitor"),
+      printQRInTerminal: false,
+      syncFullHistory: false,
+      markOnlineOnConnect: false,
+      generateHighQualityLinkPreview: false,
+    });
+
+    sock = socket;
+
+    socket.ev.on("creds.update", persistCreds);
+
+    socket.ev.on("connection.update", (update) => {
+      const { connection, lastDisconnect, qr } = update;
+
+      if (qr) {
+        if (phone && !socket.authState.creds.registered) {
+          void requestPairingCodeOnce(socket, phone);
+        } else {
+          currentQrString = qr;
+          currentQrId += 1;
+          if (currentQrId === 1 || currentQrId % 5 === 0) {
+            console.log(
+              `[WhatsApp] QR #${currentQrId} pronto — escaneie em /api/qr`,
+            );
+          }
+        }
+      }
+
+      if (connection === "connecting") {
+        isPairing = true;
+      }
+
+      if (connection === "open") {
+        isReady = true;
+        isPairing = false;
+        pairingCodeRequested = false;
+        currentQrString = null;
+        currentPairingCode = null;
+        cancelReconnect();
+
+        const groupId = process.env.WHATSAPP_GROUP_ID ?? "(nao configurado)";
+        const prefix = process.env.WHATSAPP_COMMAND_PREFIX ?? "!";
+        console.log("✅ WhatsApp conectado!");
+        console.log(`💬 Grupo monitorado: ${groupId}`);
+        console.log(
+          `💬 Comandos: ${prefix}status | ${prefix}historico | ${prefix}jornada | ${prefix}site | ${prefix}ajuda`,
+        );
+      }
+
+      if (connection === "close") {
+        isReady = false;
+        isConnecting = false;
+        sock = null;
+        currentQrString = null;
+
+        const statusCode = (lastDisconnect?.error as Boom | undefined)?.output
+          ?.statusCode;
+        const loggedOut = statusCode === DisconnectReason.loggedOut;
+
+        console.warn(
+          `[WhatsApp] Conexao fechada (code=${statusCode ?? "?"})`,
+          lastDisconnect?.error?.message ?? "",
+        );
+
+        if (loggedOut) {
+          void clearWhatsAppSessionFiles().then(() => {
+            pairingCodeRequested = false;
+            scheduleReconnect("logged_out", 10_000);
+          });
+          return;
+        }
+
+        scheduleReconnect("connection_close", 15_000);
+      }
+    });
+
+    socket.ev.on("messages.upsert", ({ messages, type }) => {
+      if (type !== "notify") return;
+      for (const message of messages) {
+        void handleIncomingMessage(message);
+      }
+    });
+
+    console.log(`[WhatsApp] Baileys iniciado — auth em ${authPath}`);
+    if (phone) {
+      console.log(
+        `[WhatsApp] Modo codigo (${maskPhoneNumber(phone)}) — aguarde /api/qr`,
+      );
+    }
+
+    isConnecting = false;
+  } catch (error) {
+    isConnecting = false;
+    sock = null;
+    const message = error instanceof Error ? error.message : String(error);
+    console.error("[WhatsApp] Falha ao iniciar:", message);
+    scheduleReconnect("start_error", 20_000);
+  }
+}
+
+export function initWhatsAppClient(): void {
   if (!process.env.WHATSAPP_GROUP_ID?.trim()) {
     console.warn(
       "[WhatsApp] AVISO: defina WHATSAPP_GROUP_ID no Render (ex: 120363...@g.us)",
     );
   }
 
-  client = createClient();
-  wireClientEvents(client);
-  void client.initialize().catch((error) => {
-    const message = error instanceof Error ? error.message : String(error);
-    console.error("[WhatsApp] Falha ao inicializar:", message);
-    client = null;
-    if (!isPairing && !isAuthenticated) {
-      scheduleReconnect("initialize_error", { resetSession: false, delayMs: 30_000 });
-    }
-  });
-  return client;
+  void startWhatsApp();
 }
 
 export async function resetWhatsAppSession(): Promise<void> {
   cancelReconnect();
-  const generation = ++initGeneration;
-
+  pairingCodeRequested = false;
   isReady = false;
   isPairing = false;
-  isAuthenticated = false;
+  isConnecting = false;
   currentQrString = null;
   currentQrId = 0;
   currentPairingCode = null;
 
-  await destroyClientSafely();
-  if (generation !== initGeneration) return;
+  if (sock) {
+    try {
+      sock.end(undefined);
+    } catch {
+      /* ignore */
+    }
+    sock = null;
+  }
 
   await clearWhatsAppSessionFiles();
-  initWhatsAppClient();
+  void startWhatsApp();
 }
 
 export async function shutdownWhatsApp(): Promise<void> {
   cancelReconnect();
-  await destroyClientSafely();
+  if (sock) {
+    try {
+      sock.end(undefined);
+    } catch {
+      /* ignore */
+    }
+    sock = null;
+  }
+  isReady = false;
+  isConnecting = false;
 }
 
 export function isWhatsAppReady(): boolean {
@@ -386,11 +346,11 @@ export async function sendGroupMessage(message: string): Promise<void> {
     );
   }
 
-  if (!client || !isReady) {
+  if (!sock || !isReady) {
     console.warn("⚠️ WhatsApp não está pronto. Mensagem não enviada.");
     return;
   }
 
-  await client.sendMessage(groupId, message);
+  await sock.sendMessage(groupId, { text: message });
   console.log(`📤 Mensagem enviada para o grupo ${groupId}`);
 }
