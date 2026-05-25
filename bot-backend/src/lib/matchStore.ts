@@ -1,6 +1,11 @@
 import fs from "fs/promises";
+import path from "path";
 import type { RankedSnapshot } from "@/types/riot";
 import { getMatchStorePath, getPersistentDataDir } from "@/lib/paths";
+
+async function ensureStoreDir(): Promise<void> {
+  await fs.mkdir(path.dirname(storePath()), { recursive: true });
+}
 
 function storePath(): string {
   return getMatchStorePath();
@@ -71,7 +76,7 @@ export async function updateMatchStore(
     ...partial,
     updatedAt: new Date().toISOString(),
   };
-  await fs.mkdir(getPersistentDataDir(), { recursive: true });
+  await ensureStoreDir();
   await fs.writeFile(storePath(), JSON.stringify(data, null, 2), "utf-8");
 }
 
@@ -96,7 +101,7 @@ export async function ensureStoreExists(): Promise<void> {
   try {
     await fs.access(storePath());
   } catch {
-    await fs.mkdir(getPersistentDataDir(), { recursive: true });
+    await ensureStoreDir();
     await fs.writeFile(
       storePath(),
       JSON.stringify(DEFAULT_STORE, null, 2),
