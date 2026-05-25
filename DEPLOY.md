@@ -74,10 +74,14 @@ API: `GET /api/history`
 ## Frontend (Vercel)
 
 1. Importe o repositório na Vercel.
-2. **Root Directory:** `web-frontend`
-3. Framework: Next.js (detecção automática)
-4. Variável de ambiente:
-   - `NEXT_PUBLIC_API_URL` = URL pública do backend (ex: `https://lol-match-monitor.onrender.com`)
+2. **Root Directory:** `web-frontend` (obrigatório no monorepo)
+3. Framework: Next.js
+4. **Environment Variables** — marque **Production**, **Preview** e **Development**:
+   - `NEXT_PUBLIC_API_URL` = `https://lol-match-monitor.onrender.com` (sem `/` no final)
+5. Depois de salvar a variável, faça **Redeploy** (build antigo não inclui env nova).
+6. No Render, `CORS_ORIGIN` pode incluir `http://localhost:3000`; URLs `*.vercel.app` já são aceitas pelo backend.
+
+**Erro comum:** `Failed to fetch` = URL errada, backend dormindo (Render free) ou CORS. Não é falha de build do Next se o deploy ficou verde.
 
 ---
 

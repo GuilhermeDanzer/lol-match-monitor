@@ -18,9 +18,24 @@ const app = express();
 const corsOrigins = process.env.CORS_ORIGIN?.split(",")
   .map((o) => o.trim())
   .filter(Boolean);
+
+function isAllowedCorsOrigin(origin: string | undefined): boolean {
+  if (!origin) return true;
+  if (!corsOrigins?.length) return true;
+  if (corsOrigins.includes(origin)) return true;
+  try {
+    const host = new URL(origin).hostname;
+    return host === "localhost" || host.endsWith(".vercel.app");
+  } catch {
+    return false;
+  }
+}
+
 app.use(
   cors({
-    origin: corsOrigins?.length ? corsOrigins : true,
+    origin: (origin, callback) => {
+      callback(null, isAllowedCorsOrigin(origin));
+    },
   }),
 );
 app.use(express.json());
