@@ -21,16 +21,22 @@ import {
 const port = Number(process.env.PORT) || 4000;
 const hostname = process.env.HOSTNAME ?? "0.0.0.0";
 
-/** Evita crash loop por erro conhecido do Puppeteer/Chromium no Render */
+/** Evita crash loop por erros conhecidos do Puppeteer/Chromium no Render */
 process.on("unhandledRejection", (reason) => {
   const message = String(
     reason instanceof Error ? reason.message : reason,
   );
-  if (
-    message.includes("Protocol error") &&
-    message.includes("Network.getResponseBody")
-  ) {
-    console.warn("[WhatsApp] Protocol error ignorado (Puppeteer):", message);
+  const name = reason instanceof Error ? reason.name : "";
+  const isPuppeteerNoise =
+    (message.includes("Protocol error") &&
+      (message.includes("Network.getResponseBody") ||
+        message.includes("Runtime.evaluate") ||
+        message.includes("Target closed"))) ||
+    name === "TargetCloseError" ||
+    message.includes("Target closed");
+
+  if (isPuppeteerNoise) {
+    console.warn("[WhatsApp] Erro Puppeteer ignorado:", message);
     return;
   }
   console.error("[unhandledRejection]", reason);

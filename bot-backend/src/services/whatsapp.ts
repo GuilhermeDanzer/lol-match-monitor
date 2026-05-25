@@ -13,9 +13,12 @@ import {
 
 let client: Client | null = null;
 let isReady = false;
+let isPairing = false;
+let isAuthenticated = false;
 let currentQrString: string | null = null;
 let currentQrId = 0;
 let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
+let initGeneration = 0;
 
 const PUPPETEER_ARGS = [
   "--no-sandbox",
@@ -24,7 +27,6 @@ const PUPPETEER_ARGS = [
   "--disable-gpu",
   "--disable-software-rasterizer",
   "--no-zygote",
-  "--single-process",
 ];
 
 export function getCurrentQrString(): string | null {
@@ -38,6 +40,7 @@ export function getCurrentQrId(): number {
 export function getWhatsAppStatus(): {
   ready: boolean;
   awaitingQr: boolean;
+  pairing: boolean;
   groupIdConfigured: boolean;
   authPath: string;
   qrId: number;
@@ -45,10 +48,18 @@ export function getWhatsAppStatus(): {
   return {
     ready: isReady,
     awaitingQr: Boolean(currentQrString),
+    pairing: isPairing,
     groupIdConfigured: Boolean(process.env.WHATSAPP_GROUP_ID?.trim()),
     authPath: getWhatsAppAuthPath(),
     qrId: currentQrId,
   };
+}
+
+function cancelReconnect(): void {
+  if (reconnectTimer) {
+    clearTimeout(reconnectTimer);
+    reconnectTimer = null;
+  }
 }
 
 function getCommandPrefix(): string {
@@ -115,33 +126,48 @@ async function clearWhatsAppSessionFiles(): Promise<void> {
   console.log(`[WhatsApp] Sessao limpa em ${getPersistentDataDir()}`);
 }
 
+async function destroyClientSafely(): Promise<void> {
+  const active = client;
+  client = null;
+  if (!active) return;
+
+  try {
+    await active.destroy();
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    console.warn("[WhatsApp] destroy ignorado:", message);
+  }
+}
+
 function scheduleReconnect(
   reason: string,
   options?: { resetSession?: boolean; delayMs?: number },
 ): void {
-  if (reconnectTimer) return;
+  cancelReconnect();
 
-  const delayMs = options?.delayMs ?? 15_000;
+  const delayMs = options?.delayMs ?? 20_000;
+  const resetSession = options?.resetSession ?? false;
+
   console.warn(
-    `[WhatsApp] Reconectando em ${delayMs / 1000}s (${reason})...`,
+    `[WhatsApp] Reconectando em ${delayMs / 1000}s (${reason}, reset=${resetSession})...`,
   );
 
   reconnectTimer = setTimeout(() => {
     reconnectTimer = null;
     void (async () => {
-      try {
-        await client?.destroy();
-      } catch {
-        /* ignore */
-      }
-      client = null;
+      const generation = ++initGeneration;
+      await destroyClientSafely();
+
       isReady = false;
       currentQrString = null;
 
-      if (options?.resetSession) {
+      if (resetSession) {
         await clearWhatsAppSessionFiles();
+        isPairing = false;
+        isAuthenticated = false;
       }
 
+      if (generation !== initGeneration) return;
       initWhatsAppClient();
     })();
   }, delayMs);
@@ -155,6 +181,7 @@ function createClient(): Client {
     authStrategy: new LocalAuth({ dataPath: authPath }),
     takeoverOnConflict: true,
     bypassCSP: true,
+    authTimeoutMs: 120_000,
     puppeteer: {
       headless: true,
       ...(executablePath ? { executablePath } : {}),
@@ -165,18 +192,26 @@ function createClient(): Client {
 
 function wireClientEvents(waClient: Client): void {
   waClient.on("qr", (qr) => {
+    isPairing = false;
+    isAuthenticated = false;
     currentQrString = qr;
     currentQrId += 1;
     console.log(`[WhatsApp] QR #${currentQrId} pronto — escaneie em /api/qr`);
   });
 
   waClient.on("loading_screen", (percent, message) => {
+    isPairing = true;
+    cancelReconnect();
     console.log(`[WhatsApp] Carregando ${percent}% — ${message}`);
   });
 
   waClient.on("ready", () => {
     isReady = true;
+    isPairing = false;
+    isAuthenticated = false;
     currentQrString = null;
+    cancelReconnect();
+
     const prefix = getCommandPrefix();
     const groupId = process.env.WHATSAPP_GROUP_ID ?? "(nao configurado)";
     console.log("✅ WhatsApp conectado!");
@@ -191,14 +226,19 @@ function wireClientEvents(waClient: Client): void {
   });
 
   waClient.on("authenticated", () => {
+    isAuthenticated = true;
+    isPairing = true;
+    cancelReconnect();
     console.log("🔐 WhatsApp autenticado com sucesso.");
   });
 
   waClient.on("auth_failure", (msg) => {
     console.error("❌ Falha na autenticacao do WhatsApp:", msg);
     isReady = false;
+    isPairing = false;
+    isAuthenticated = false;
     currentQrString = null;
-    scheduleReconnect("auth_failure", { resetSession: true, delayMs: 20_000 });
+    scheduleReconnect("auth_failure", { resetSession: true, delayMs: 30_000 });
   });
 
   waClient.on("disconnected", (reason) => {
@@ -208,11 +248,22 @@ function wireClientEvents(waClient: Client): void {
     currentQrString = null;
 
     if (wasReady) {
-      scheduleReconnect(String(reason));
+      isPairing = false;
+      isAuthenticated = false;
+      scheduleReconnect(String(reason), { resetSession: false, delayMs: 15_000 });
       return;
     }
 
-    scheduleReconnect(String(reason), { resetSession: true, delayMs: 25_000 });
+    if (isPairing || isAuthenticated) {
+      console.log(
+        "[WhatsApp] Desconexao durante pareamento — mantendo sessao salva, reconectando...",
+      );
+      isPairing = true;
+      scheduleReconnect(String(reason), { resetSession: false, delayMs: 15_000 });
+      return;
+    }
+
+    scheduleReconnect(String(reason), { resetSession: false, delayMs: 30_000 });
   });
 }
 
@@ -234,26 +285,30 @@ export function initWhatsAppClient(): Client {
 
   client = createClient();
   wireClientEvents(client);
-  client.initialize();
+  void client.initialize().catch((error) => {
+    const message = error instanceof Error ? error.message : String(error);
+    console.error("[WhatsApp] Falha ao inicializar:", message);
+    client = null;
+    if (!isPairing && !isAuthenticated) {
+      scheduleReconnect("initialize_error", { resetSession: false, delayMs: 30_000 });
+    }
+  });
   return client;
 }
 
 export async function resetWhatsAppSession(): Promise<void> {
-  if (reconnectTimer) {
-    clearTimeout(reconnectTimer);
-    reconnectTimer = null;
-  }
+  cancelReconnect();
+  const generation = ++initGeneration;
 
-  try {
-    await client?.destroy();
-  } catch {
-    /* ignore */
-  }
-
-  client = null;
   isReady = false;
+  isPairing = false;
+  isAuthenticated = false;
   currentQrString = null;
   currentQrId = 0;
+
+  await destroyClientSafely();
+  if (generation !== initGeneration) return;
+
   await clearWhatsAppSessionFiles();
   initWhatsAppClient();
 }
