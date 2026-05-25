@@ -102,7 +102,14 @@ export default function Dashboard() {
         const json = (await res.json()) as HistoryApiResponse;
         setData(json);
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Erro desconhecido");
+        const base = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") ?? "";
+        const hint =
+          err instanceof TypeError && err.message === "Failed to fetch"
+            ? ` Nao foi possivel conectar em ${base}/api/history (backend offline, CORS ou URL errada).`
+            : "";
+        setError(
+          (err instanceof Error ? err.message : "Erro desconhecido") + hint,
+        );
       } finally {
         setLoading(false);
       }

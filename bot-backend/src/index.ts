@@ -15,7 +15,9 @@ const hostname = process.env.HOSTNAME ?? "0.0.0.0";
 
 const app = express();
 
-const corsOrigins = process.env.CORS_ORIGIN?.split(",").map((o) => o.trim());
+const corsOrigins = process.env.CORS_ORIGIN?.split(",")
+  .map((o) => o.trim())
+  .filter(Boolean);
 app.use(
   cors({
     origin: corsOrigins?.length ? corsOrigins : true,
