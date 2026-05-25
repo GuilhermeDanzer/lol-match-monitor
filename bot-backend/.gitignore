@@ -1,0 +1,9 @@
+node_modules
+dist
+.env
+.env.local
+.wwebjs_auth
+.wwebjs_cache
+data/lastMatch.json
+data/journey.json
+*.log

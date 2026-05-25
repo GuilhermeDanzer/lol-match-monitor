@@ -1,0 +1,15 @@
+node_modules
+.next
+.git
+.wwebjs_auth
+.wwebjs_cache
+lastMatch.json
+data
+.env*
+!.env.example
+npm-debug.log*
+README.md
+DEPLOY.md
+*.md
+coverage
+.DS_Store

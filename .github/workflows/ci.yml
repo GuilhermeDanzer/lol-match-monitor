@@ -1,0 +1,36 @@
+name: Validar Build Antes do Deploy
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build-backend:
+    name: 🤖 Testar Build do Bot
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./bot-backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: npm install
+      - run: npm run build
+
+  build-frontend:
+    name: 🌐 Testar Build do Site
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./web-frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: npm install
+      - run: npm run build

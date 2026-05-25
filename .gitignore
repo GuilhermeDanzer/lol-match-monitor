@@ -1,0 +1,17 @@
+node_modules
+.env
+.env.local
+.wwebjs_auth
+.wwebjs_cache
+*.log
+.DS_Store
+
+# Legado na raiz — não commitar env nem sessão WhatsApp aqui
+.env
+.env.local
+.env.*
+!.env.example
+.wwebjs_auth/
+.wwebjs_cache/
+/dist
+/.next

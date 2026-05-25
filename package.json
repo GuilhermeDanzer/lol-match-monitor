@@ -1,0 +1,17 @@
+{
+  "name": "lol-match-monitor",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "bot-backend",
+    "web-frontend"
+  ],
+  "scripts": {
+    "dev:bot": "npm run dev --workspace=lol-match-monitor-bot",
+    "dev:web": "npm run dev --workspace=lol-match-monitor-web",
+    "build:bot": "npm run build --workspace=lol-match-monitor-bot",
+    "build:web": "npm run build --workspace=lol-match-monitor-web",
+    "build": "npm run build:bot && npm run build:web",
+    "install:all": "npm install"
+  }
+}
