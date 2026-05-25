@@ -17,6 +17,7 @@ let isPairing = false;
 let isAuthenticated = false;
 let currentQrString: string | null = null;
 let currentQrId = 0;
+let currentPairingCode: string | null = null;
 let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
 let initGeneration = 0;
 
@@ -37,18 +38,44 @@ export function getCurrentQrId(): number {
   return currentQrId;
 }
 
+export function getCurrentPairingCode(): string | null {
+  return currentPairingCode;
+}
+
+export function usesPairingCodeMode(): boolean {
+  return Boolean(normalizePhoneNumber(process.env.WHATSAPP_PHONE_NUMBER));
+}
+
+function normalizePhoneNumber(raw: string | undefined): string | null {
+  if (!raw?.trim()) return null;
+  const digits = raw.replace(/\D/g, "");
+  return digits.length >= 10 ? digits : null;
+}
+
+function maskPhoneNumber(phone: string): string {
+  if (phone.length <= 4) return "****";
+  return `${phone.slice(0, 4)}****${phone.slice(-2)}`;
+}
+
 export function getWhatsAppStatus(): {
   ready: boolean;
   awaitingQr: boolean;
   pairing: boolean;
+  pairingCodeMode: boolean;
+  pairingCode: string | null;
+  phoneMasked: string | null;
   groupIdConfigured: boolean;
   authPath: string;
   qrId: number;
 } {
+  const phone = normalizePhoneNumber(process.env.WHATSAPP_PHONE_NUMBER);
   return {
     ready: isReady,
     awaitingQr: Boolean(currentQrString),
     pairing: isPairing,
+    pairingCodeMode: Boolean(phone),
+    pairingCode: currentPairingCode,
+    phoneMasked: phone ? maskPhoneNumber(phone) : null,
     groupIdConfigured: Boolean(process.env.WHATSAPP_GROUP_ID?.trim()),
     authPath: getWhatsAppAuthPath(),
     qrId: currentQrId,
@@ -176,12 +203,22 @@ function scheduleReconnect(
 function createClient(): Client {
   const authPath = getWhatsAppAuthPath();
   const executablePath = process.env.PUPPETEER_EXECUTABLE_PATH?.trim();
+  const phone = normalizePhoneNumber(process.env.WHATSAPP_PHONE_NUMBER);
 
   return new Client({
     authStrategy: new LocalAuth({ dataPath: authPath }),
     takeoverOnConflict: true,
     bypassCSP: true,
     authTimeoutMs: 120_000,
+    ...(phone
+      ? {
+          pairWithPhoneNumber: {
+            phoneNumber: phone,
+            showNotification: true,
+            intervalMs: 180_000,
+          },
+        }
+      : {}),
     puppeteer: {
       headless: true,
       ...(executablePath ? { executablePath } : {}),
@@ -191,6 +228,13 @@ function createClient(): Client {
 }
 
 function wireClientEvents(waClient: Client): void {
+  waClient.on("code", (code) => {
+    currentPairingCode = code;
+    isPairing = true;
+    cancelReconnect();
+    console.log(`[WhatsApp] Codigo de pareamento: ${code} — abra /api/qr`);
+  });
+
   waClient.on("qr", (qr) => {
     isPairing = false;
     isAuthenticated = false;
@@ -279,7 +323,13 @@ export function initWhatsAppClient(): Client {
   if (client) return client;
 
   const authPath = getWhatsAppAuthPath();
+  const phone = normalizePhoneNumber(process.env.WHATSAPP_PHONE_NUMBER);
   console.log(`[WhatsApp] Sessao LocalAuth: ${authPath}`);
+  if (phone) {
+    console.log(
+      `[WhatsApp] Modo codigo (${maskPhoneNumber(phone)}) — aguarde codigo em /api/qr`,
+    );
+  }
 
   if (!process.env.WHATSAPP_GROUP_ID?.trim()) {
     console.warn(
@@ -309,6 +359,7 @@ export async function resetWhatsAppSession(): Promise<void> {
   isAuthenticated = false;
   currentQrString = null;
   currentQrId = 0;
+  currentPairingCode = null;
 
   await destroyClientSafely();
   if (generation !== initGeneration) return;

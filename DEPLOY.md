@@ -66,11 +66,20 @@ API: `GET /api/history` | WhatsApp QR: `GET /api/qr` | Status WA: `GET /api/what
 
 ### WhatsApp no Render
 
-1. Abra **`https://lol-match-monitor.onrender.com/api/qr`** — o QR **atualiza sozinho** na tela (sem recarregar a pagina).
-2. Se o celular disser **"nao foi possivel conectar"**, clique em **Limpar sessao e gerar novo QR** (so antes de escanear — **nao clique** depois que aparecer "Carregando 100%" nos logs).
-3. No Render → **Environment**, configure `WHATSAPP_GROUP_ID` = ID do grupo (`120363xxxxxxxx@g.us`).
-4. Para **nao escanear a cada deploy**, adicione **Persistent Disk** montado em `/app` (plano pago).
-5. Confirme conexao: `GET /api/whatsapp/status` → `"ready": true`.
+**Recomendado:** pareamento por **codigo** (mais facil que QR na nuvem).
+
+1. No Render → **Environment**, adicione:
+   - `WHATSAPP_PHONE_NUMBER` = seu celular (ex: `5511999887766`, sem `+`)
+2. Aguarde o deploy terminar (**nao faca push enquanto conecta**).
+3. Abra **`https://lol-match-monitor.onrender.com/api/qr`** — aparece um codigo de 8 letras.
+4. No celular: **Aparelhos conectados → Conectar aparelho → Conectar com numero de telefone** → digite o codigo.
+5. Confirme: `GET /api/whatsapp/status` → `"ready": true`.
+
+**Alternativa (QR):** deixe `WHATSAPP_PHONE_NUMBER` vazio e escaneie o QR em `/api/qr` (expira ~20s).
+
+- `WHATSAPP_GROUP_ID` = ID do grupo (`120363xxxxxxxx@g.us`)
+- **Persistent Disk** em `/app` (pago) evita reconectar a cada deploy
+- `SIGTERM` / `npm error` nos logs = deploy normal do Render, nao e falha
 
 ## Backend (Railway) — alternativa
 

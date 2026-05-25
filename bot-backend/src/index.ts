@@ -79,12 +79,22 @@ app.get("/api/whatsapp/status", (_req, res) => {
   res.json(getWhatsAppStatus());
 });
 
-/** QR atual em JSON (pagina /api/qr atualiza a imagem sem reload) */
+/** QR/codigo atual em JSON (pagina /api/qr atualiza sem reload) */
 app.get("/api/qr/data", async (_req, res) => {
   try {
     const status = getWhatsAppStatus();
     if (status.ready) {
       res.json({ ready: true, awaitingQr: false, qrId: status.qrId });
+      return;
+    }
+
+    if (status.pairingCodeMode) {
+      res.json({
+        ready: false,
+        pairingCodeMode: true,
+        pairingCode: status.pairingCode,
+        phoneMasked: status.phoneMasked,
+      });
       return;
     }
 
@@ -153,17 +163,43 @@ app.get("/api/qr", async (_req, res) => {
 </head>
 <body style="background:#0a0a0a;color:#fafafa;font-family:system-ui,sans-serif;text-align:center;padding:2rem">
   <h1 id="title">Conectar WhatsApp</h1>
-  <p>WhatsApp &gt; Aparelhos conectados &gt; Conectar aparelho</p>
-  <p id="hint" style="color:#888;font-size:0.875rem">Aguardando QR...</p>
+  <p id="subtitle">WhatsApp &gt; Aparelhos conectados &gt; Conectar aparelho</p>
+  <p id="hint" style="color:#888;font-size:0.875rem">Iniciando...</p>
+  <div id="codeBox" style="display:none;margin:1.5rem auto;padding:1.5rem;max-width:20rem;background:#14532d;border-radius:12px">
+    <p style="margin:0 0 0.5rem;font-size:0.875rem;color:#bbf7d0">Codigo de pareamento (valido ~3 min)</p>
+    <p id="pairCode" style="margin:0;font-size:2.5rem;font-weight:700;letter-spacing:0.35em;font-family:monospace"></p>
+    <p id="phoneHint" style="margin:0.75rem 0 0;font-size:0.75rem;color:#86efac"></p>
+  </div>
   <img id="qr" alt="QR Code WhatsApp" width="320" height="320"
     style="margin:1rem auto;border:8px solid #fff;border-radius:8px;display:none"/>
   <p style="margin-top:1.5rem">
     <button type="button" id="resetBtn" style="cursor:pointer;padding:0.6rem 1.2rem;font-size:1rem;border-radius:8px;border:none;background:#dc2626;color:#fff">
-      Limpar sessao e gerar novo QR
+      Limpar sessao e tentar de novo
     </button>
   </p>
   <script>
   let lastQrId = null;
+  let lastCode = null;
+
+  function showCodeMode(d) {
+    document.getElementById("qr").style.display = "none";
+    document.getElementById("codeBox").style.display = "block";
+    document.getElementById("title").textContent = "Digite o codigo no celular";
+    document.getElementById("subtitle").textContent =
+      "Aparelhos conectados > Conectar aparelho > Conectar com numero de telefone";
+    if (d.phoneMasked) {
+      document.getElementById("phoneHint").textContent = "Numero: " + d.phoneMasked;
+    }
+    if (d.pairingCode && d.pairingCode !== lastCode) {
+      lastCode = d.pairingCode;
+      document.getElementById("pairCode").textContent = d.pairingCode;
+      document.getElementById("hint").textContent =
+        "Codigo atualizado — digite no WhatsApp do celular";
+    } else if (!d.pairingCode) {
+      document.getElementById("hint").textContent =
+        "Gerando codigo... aguarde ~30s";
+    }
+  }
 
   async function refreshQr() {
     try {
@@ -172,6 +208,11 @@ app.get("/api/qr", async (_req, res) => {
         location.reload();
         return;
       }
+      if (d.pairingCodeMode) {
+        showCodeMode(d);
+        return;
+      }
+      document.getElementById("codeBox").style.display = "none";
       if (!d.awaitingQr || !d.dataUrl) {
         document.getElementById("hint").textContent =
           "Chromium iniciando... aguarde o QR aparecer.";
@@ -193,6 +234,7 @@ app.get("/api/qr", async (_req, res) => {
     document.getElementById("hint").textContent = "Limpando sessao...";
     await fetch("/api/whatsapp/reset", { method: "POST" });
     lastQrId = null;
+    lastCode = null;
     setTimeout(refreshQr, 3000);
   });
 
