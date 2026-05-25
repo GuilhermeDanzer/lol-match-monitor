@@ -10,6 +10,10 @@ export function getWhatsAppAuthPath(): string {
   return path.join(getPersistentDataDir(), ".wwebjs_auth");
 }
 
+export function getWhatsAppCachePath(): string {
+  return path.join(getPersistentDataDir(), ".wwebjs_cache");
+}
+
 /**
  * Pasta dos JSONs (lastMatch, journey).
  * Aceita PERSISTENT_DATA_DIR=/app ou /app/data sem gerar /app/data/data.

@@ -1,4 +1,9 @@
-import { getWhatsAppAuthPath } from "@/lib/paths";
+import {
+  getPersistentDataDir,
+  getWhatsAppAuthPath,
+  getWhatsAppCachePath,
+} from "@/lib/paths";
+import fs from "fs/promises";
 import type { Chat, Message } from "whatsapp-web.js";
 import { Client, LocalAuth } from "whatsapp-web.js";
 import {
@@ -9,6 +14,7 @@ import {
 let client: Client | null = null;
 let isReady = false;
 let currentQrString: string | null = null;
+let currentQrId = 0;
 let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
 
 const PUPPETEER_ARGS = [
@@ -18,17 +24,15 @@ const PUPPETEER_ARGS = [
   "--disable-gpu",
   "--disable-software-rasterizer",
   "--no-zygote",
+  "--single-process",
 ];
-
-/** Versao remota do WhatsApp Web (evita tela branca / QR que nao autentica) */
-const WEB_VERSION_CACHE = {
-  type: "remote" as const,
-  remotePath:
-    "https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.3000.1017054665.html",
-};
 
 export function getCurrentQrString(): string | null {
   return currentQrString;
+}
+
+export function getCurrentQrId(): number {
+  return currentQrId;
 }
 
 export function getWhatsAppStatus(): {
@@ -36,12 +40,14 @@ export function getWhatsAppStatus(): {
   awaitingQr: boolean;
   groupIdConfigured: boolean;
   authPath: string;
+  qrId: number;
 } {
   return {
     ready: isReady,
     awaitingQr: Boolean(currentQrString),
     groupIdConfigured: Boolean(process.env.WHATSAPP_GROUP_ID?.trim()),
     authPath: getWhatsAppAuthPath(),
+    qrId: currentQrId,
   };
 }
 
@@ -101,10 +107,25 @@ async function onIncomingMessage(msg: Message): Promise<void> {
   await handleWhatsAppCommand(body, (text) => replyInChat(msg, chat, text));
 }
 
-function scheduleReconnect(reason: string): void {
+async function clearWhatsAppSessionFiles(): Promise<void> {
+  const authPath = getWhatsAppAuthPath();
+  const cachePath = getWhatsAppCachePath();
+  await fs.rm(authPath, { recursive: true, force: true });
+  await fs.rm(cachePath, { recursive: true, force: true });
+  console.log(`[WhatsApp] Sessao limpa em ${getPersistentDataDir()}`);
+}
+
+function scheduleReconnect(
+  reason: string,
+  options?: { resetSession?: boolean; delayMs?: number },
+): void {
   if (reconnectTimer) return;
 
-  console.warn(`[WhatsApp] Reconectando em 10s (${reason})...`);
+  const delayMs = options?.delayMs ?? 15_000;
+  console.warn(
+    `[WhatsApp] Reconectando em ${delayMs / 1000}s (${reason})...`,
+  );
+
   reconnectTimer = setTimeout(() => {
     reconnectTimer = null;
     void (async () => {
@@ -116,9 +137,14 @@ function scheduleReconnect(reason: string): void {
       client = null;
       isReady = false;
       currentQrString = null;
+
+      if (options?.resetSession) {
+        await clearWhatsAppSessionFiles();
+      }
+
       initWhatsAppClient();
     })();
-  }, 10_000);
+  }, delayMs);
 }
 
 function createClient(): Client {
@@ -127,7 +153,8 @@ function createClient(): Client {
 
   return new Client({
     authStrategy: new LocalAuth({ dataPath: authPath }),
-    webVersionCache: WEB_VERSION_CACHE,
+    takeoverOnConflict: true,
+    bypassCSP: true,
     puppeteer: {
       headless: true,
       ...(executablePath ? { executablePath } : {}),
@@ -139,9 +166,12 @@ function createClient(): Client {
 function wireClientEvents(waClient: Client): void {
   waClient.on("qr", (qr) => {
     currentQrString = qr;
-    console.log(
-      "[WhatsApp] QR pendente — escaneie em https://SEU-BACKEND/api/qr (atualize a cada ~20s)",
-    );
+    currentQrId += 1;
+    console.log(`[WhatsApp] QR #${currentQrId} pronto — escaneie em /api/qr`);
+  });
+
+  waClient.on("loading_screen", (percent, message) => {
+    console.log(`[WhatsApp] Carregando ${percent}% — ${message}`);
   });
 
   waClient.on("ready", () => {
@@ -168,14 +198,21 @@ function wireClientEvents(waClient: Client): void {
     console.error("❌ Falha na autenticacao do WhatsApp:", msg);
     isReady = false;
     currentQrString = null;
-    scheduleReconnect("auth_failure");
+    scheduleReconnect("auth_failure", { resetSession: true, delayMs: 20_000 });
   });
 
   waClient.on("disconnected", (reason) => {
     console.warn("⚠️ WhatsApp desconectado:", reason);
+    const wasReady = isReady;
     isReady = false;
     currentQrString = null;
-    scheduleReconnect(String(reason));
+
+    if (wasReady) {
+      scheduleReconnect(String(reason));
+      return;
+    }
+
+    scheduleReconnect(String(reason), { resetSession: true, delayMs: 25_000 });
   });
 }
 
@@ -199,6 +236,26 @@ export function initWhatsAppClient(): Client {
   wireClientEvents(client);
   client.initialize();
   return client;
+}
+
+export async function resetWhatsAppSession(): Promise<void> {
+  if (reconnectTimer) {
+    clearTimeout(reconnectTimer);
+    reconnectTimer = null;
+  }
+
+  try {
+    await client?.destroy();
+  } catch {
+    /* ignore */
+  }
+
+  client = null;
+  isReady = false;
+  currentQrString = null;
+  currentQrId = 0;
+  await clearWhatsAppSessionFiles();
+  initWhatsAppClient();
 }
 
 export function isWhatsAppReady(): boolean {
