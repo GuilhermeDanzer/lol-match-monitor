@@ -16,6 +16,7 @@ import {
   getWhatsAppStatus,
   initWhatsAppClient,
   resetWhatsAppSession,
+  shutdownWhatsApp,
 } from "@/services/whatsapp";
 
 const port = Number(process.env.PORT) || 4000;
@@ -244,11 +245,22 @@ async function bootstrap(): Promise<void> {
   console.log("⏰ Cron 1: sincronização ranqueada a cada 15 minutos");
   console.log("⏰ Cron 2: relatório WhatsApp a cada 6 horas");
 
-  app.listen(port, hostname, () => {
+  const server = app.listen(port, hostname, () => {
     console.log(`\n🤖 Bot backend em http://${hostname}:${port}`);
     console.log(`📡 API: GET /api/history | GET /api/qr | GET /api/whatsapp/status`);
     console.log("📋 Aguardando conexão do WhatsApp...\n");
   });
+
+  const shutdown = (signal: string) => {
+    console.log(`[${signal}] Encerrando servidor...`);
+    void (async () => {
+      await shutdownWhatsApp();
+      server.close(() => process.exit(0));
+    })();
+  };
+
+  process.on("SIGTERM", () => shutdown("SIGTERM"));
+  process.on("SIGINT", () => shutdown("SIGINT"));
 }
 
 bootstrap().catch((error) => {

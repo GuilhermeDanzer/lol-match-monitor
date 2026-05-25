@@ -196,7 +196,11 @@ function wireClientEvents(waClient: Client): void {
     isAuthenticated = false;
     currentQrString = qr;
     currentQrId += 1;
-    console.log(`[WhatsApp] QR #${currentQrId} pronto — escaneie em /api/qr`);
+    if (currentQrId === 1 || currentQrId % 5 === 0) {
+      console.log(
+        `[WhatsApp] QR #${currentQrId} pronto — escaneie em /api/qr`,
+      );
+    }
   });
 
   waClient.on("loading_screen", (percent, message) => {
@@ -311,6 +315,11 @@ export async function resetWhatsAppSession(): Promise<void> {
 
   await clearWhatsAppSessionFiles();
   initWhatsAppClient();
+}
+
+export async function shutdownWhatsApp(): Promise<void> {
+  cancelReconnect();
+  await destroyClientSafely();
 }
 
 export function isWhatsAppReady(): boolean {
