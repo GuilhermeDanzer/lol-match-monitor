@@ -62,7 +62,14 @@ Em cada push/PR para `main`, o workflow `.github/workflows/ci.yml` valida `npm r
    - `PORT` — o Render injeta automaticamente
 
 Healthcheck: `GET /health`  
-API: `GET /api/history` | WhatsApp QR: `GET /api/qr`
+API: `GET /api/history` | WhatsApp QR: `GET /api/qr` | Status WA: `GET /api/whatsapp/status`
+
+### WhatsApp no Render
+
+1. Abra **`https://lol-match-monitor.onrender.com/api/qr`** e escaneie com o celular (QR expira ~20s; a pagina recarrega sozinha apos o deploy).
+2. No Render → **Environment**, configure `WHATSAPP_GROUP_ID` = ID do grupo (`120363xxxxxxxx@g.us`).
+3. Para **nao escanear a cada deploy**, adicione **Persistent Disk** montado em `/app` (plano pago) — a sessao fica em `/app/.wwebjs_auth`.
+4. Confirme conexao: `GET /api/whatsapp/status` → `"ready": true`.
 
 ## Backend (Railway) — alternativa
 

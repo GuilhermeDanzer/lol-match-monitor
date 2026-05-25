@@ -10,7 +10,11 @@ import { ensureJourneyExists } from "@/lib/journeyStore";
 import { ensureStoreExists } from "@/lib/matchStore";
 import { sendJourneyReport, syncRankedMatches } from "@/services/monitor";
 import { getConfiguredGameName } from "@/services/riot";
-import { getCurrentQrString, initWhatsAppClient } from "@/services/whatsapp";
+import {
+  getCurrentQrString,
+  getWhatsAppStatus,
+  initWhatsAppClient,
+} from "@/services/whatsapp";
 
 const port = Number(process.env.PORT) || 4000;
 const hostname = process.env.HOSTNAME ?? "0.0.0.0";
@@ -43,32 +47,59 @@ app.use(
 app.use(express.json());
 
 app.get("/health", (_req, res) => {
-  res.json({ ok: true });
+  res.json({ ok: true, whatsapp: getWhatsAppStatus() });
+});
+
+/** Status da conexao WhatsApp (debug) */
+app.get("/api/whatsapp/status", (_req, res) => {
+  res.json(getWhatsAppStatus());
 });
 
 /** QR Code WhatsApp para escaneio no navegador (Render/cloud) */
 app.get("/api/qr", async (_req, res) => {
   try {
     const qr = getCurrentQrString();
+    const status = getWhatsAppStatus();
+
+    if (status.ready) {
+      res
+        .status(200)
+        .type("html")
+        .send(`<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8"><title>WhatsApp</title></head>
+<body style="font-family:system-ui,sans-serif;text-align:center;padding:2rem;background:#0a0a0a;color:#fafafa">
+<h1>WhatsApp conectado</h1>
+<p>O bot ja esta autenticado. Teste <code>!status</code> no grupo.</p>
+</body></html>`);
+      return;
+    }
+
     if (!qr) {
       res
         .status(200)
         .type("html")
-        .send(
-          "<!DOCTYPE html><html><body style='font-family:sans-serif;text-align:center;padding:2rem'><h1>WhatsApp</h1><p>Ja conectado ou QR indisponivel no momento.</p></body></html>",
-        );
+        .send(`<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta http-equiv="refresh" content="8"><title>WhatsApp</title></head>
+<body style="font-family:system-ui,sans-serif;text-align:center;padding:2rem;background:#0a0a0a;color:#fafafa">
+<h1>Aguardando QR...</h1>
+<p>O Chromium esta iniciando. Esta pagina atualiza sozinha em 8s.</p>
+</body></html>`);
       return;
     }
 
     const dataUrl = await QRCode.toDataURL(qr);
     res.type("html").send(`<!DOCTYPE html>
 <html lang="pt-BR">
-<head><meta charset="utf-8"><title>WhatsApp QR</title></head>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="refresh" content="15">
+  <title>WhatsApp QR</title>
+</head>
 <body style="background:#0a0a0a;color:#fafafa;font-family:system-ui,sans-serif;text-align:center;padding:2rem">
   <h1>Escaneie o QR Code</h1>
   <p>WhatsApp &gt; Aparelhos conectados &gt; Conectar aparelho</p>
-  <img src="${dataUrl}" alt="QR Code WhatsApp" width="320" height="320" style="margin:1rem auto;border:8px solid #fff;border-radius:8px"/>
-  <p style="color:#888;font-size:0.875rem">Atualize esta pagina se o QR expirar.</p>
+  <p style="color:#f59e0b;font-size:0.875rem">O QR expira em ~20s — esta pagina recarrega a cada 15s</p>
+  <img src="${dataUrl}" alt="QR Code WhatsApp" width="320" height="320" style="margin:1rem auto;border:8px solid #fff;border-radius:8px;display:block"/>
 </body>
 </html>`);
   } catch (error) {
@@ -117,7 +148,7 @@ async function bootstrap(): Promise<void> {
 
   app.listen(port, hostname, () => {
     console.log(`\n🤖 Bot backend em http://${hostname}:${port}`);
-    console.log(`📡 API: GET /api/history | GET /api/qr`);
+    console.log(`📡 API: GET /api/history | GET /api/qr | GET /api/whatsapp/status`);
     console.log("📋 Aguardando conexão do WhatsApp...\n");
   });
 }
