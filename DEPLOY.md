@@ -57,7 +57,7 @@ Em cada push/PR para `main`, o workflow `.github/workflows/ci.yml` valida `npm r
 5. Variáveis no dashboard Render (ver `bot-backend/.env.example`):
    - `RIOT_API_KEY`, `RIOT_GAME_NAME`, `RIOT_TAG_LINE`, `WHATSAPP_GROUP_ID`
    - `CORS_ORIGIN=https://seu-app.vercel.app`
-   - `PERSISTENT_DATA_DIR=/app/data` (já no Dockerfile; em plano pago use disco persistente)
+   - `PERSISTENT_DATA_DIR=/app` (recomendado; `/app/data` também funciona)
    - `PORT` — o Render injeta automaticamente
 
 Healthcheck: `GET /health`  
