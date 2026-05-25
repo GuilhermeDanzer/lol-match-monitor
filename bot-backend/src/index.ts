@@ -4,6 +4,7 @@ import express from "express";
 import cron from "node-cron";
 import { buildHistoryResponse } from "@/lib/historyStats";
 import { ensureJourneyBackfilled } from "@/lib/journeyBackfill";
+import { ensureJourneySeeded } from "@/lib/journeySeed";
 import { ensureJourneyExists } from "@/lib/journeyStore";
 import { ensureStoreExists } from "@/lib/matchStore";
 import { sendJourneyReport, syncRankedMatches } from "@/services/monitor";
@@ -61,6 +62,9 @@ async function bootstrap(): Promise<void> {
   await ensureStoreExists();
   await ensureJourneyExists();
 
+  void ensureJourneySeeded().catch((error) => {
+    console.warn("[seed] Erro na importacao inicial:", error);
+  });
   void ensureJourneyBackfilled().catch((error) => {
     console.warn("[backfill] Erro no enriquecimento inicial:", error);
   });

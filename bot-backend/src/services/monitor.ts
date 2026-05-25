@@ -14,6 +14,7 @@ import {
   setRankedSnapshot,
   updateMatchStore,
 } from "@/lib/matchStore";
+import { seedJourneyFromRiot } from "@/lib/journeySeed";
 import {
   extractPlayerMatchData,
   getCurrentRankedStats,
@@ -62,12 +63,15 @@ export async function syncRankedMatches(): Promise<void> {
     const lastProcessedId = await getLastMatchId();
 
     if (!lastProcessedId) {
-      const rankedStats = await getCurrentRankedStats(puuid);
-      await updateMatchStore({ lastMatchId: latestMatchId });
-      if (rankedStats) {
-        await setRankedSnapshot(rankedStats);
+      const seeded = await seedJourneyFromRiot(30);
+      if (seeded === 0) {
+        const rankedStats = await getCurrentRankedStats(puuid);
+        await updateMatchStore({ lastMatchId: latestMatchId });
+        if (rankedStats) {
+          await setRankedSnapshot(rankedStats);
+        }
+        console.log(`Baseline ranqueada definida: ${latestMatchId}`);
       }
-      console.log(`Baseline ranqueada definida: ${latestMatchId}`);
       return;
     }
 

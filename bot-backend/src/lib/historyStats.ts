@@ -4,6 +4,7 @@ import {
   summarizeJourneyMatches,
 } from "@/lib/journeyStore";
 import { ensureJourneyBackfilled } from "@/lib/journeyBackfill";
+import { ensureJourneySeeded } from "@/lib/journeySeed";
 import {
   computePdlNumeric,
   formatGraphTierLabel,
@@ -121,6 +122,7 @@ function buildGraphData(
 export async function buildHistoryResponse(
   playerName: string,
 ): Promise<HistoryApiResponse> {
+  await ensureJourneySeeded();
   await ensureJourneyBackfilled();
 
   const puuid = await getPlayerPuuid();

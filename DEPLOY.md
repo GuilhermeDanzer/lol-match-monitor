@@ -83,6 +83,8 @@ API: `GET /api/history`
 
 **Erro comum:** `Failed to fetch` = URL errada, backend dormindo (Render free) ou CORS. Não é falha de build do Next se o deploy ficou verde.
 
+**Partidas vazias no dashboard:** o histórico fica em `journey.json` no servidor (não vai no Git). No primeiro acesso o backend importa as últimas ~30 partidas da Riot automaticamente; a primeira carga pode levar 15–30s. No Render free os dados somem se o serviço for recriado sem disco persistente.
+
 ---
 
 ## Desenvolvimento local
