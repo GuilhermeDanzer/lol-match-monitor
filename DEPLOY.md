@@ -3,7 +3,7 @@
 | App | Pasta | Plataforma |
 |-----|-------|------------|
 | Frontend | `web-frontend/` | **Vercel** |
-| Backend | `bot-backend/` | **Railway** |
+| Backend | `bot-backend/` | **Render** (ou Railway) |
 
 ## Deploy rápido (local)
 
@@ -48,19 +48,26 @@ Em cada push/PR para `main`, o workflow `.github/workflows/ci.yml` valida `npm r
 ---
 
 
-## Backend (Railway)
+## Backend (Render)
 
-1. Repositório GitHub conectado à Railway.
+1. Repositório GitHub conectado ao Render.
 2. **Root Directory:** `bot-backend`
-3. **Build:** `npm run build` | **Start:** `npm start`
-4. **Volume:** mount `/data` → `PERSISTENT_DATA_DIR=/data`
-5. Variáveis (ver `bot-backend/.env.example`):
+3. **Runtime:** Docker (usa `bot-backend/Dockerfile`)
+4. **URL:** ex. `https://lol-match-monitor.onrender.com`
+5. Variáveis no dashboard Render (ver `bot-backend/.env.example`):
    - `RIOT_API_KEY`, `RIOT_GAME_NAME`, `RIOT_TAG_LINE`, `WHATSAPP_GROUP_ID`
    - `CORS_ORIGIN=https://seu-app.vercel.app`
-   - `PORT` (Railway injeta automaticamente)
+   - `PERSISTENT_DATA_DIR=/app/data` (já no Dockerfile; em plano pago use disco persistente)
+   - `PORT` — o Render injeta automaticamente
 
 Healthcheck: `GET /health`  
 API: `GET /api/history`
+
+## Backend (Railway) — alternativa
+
+1. **Root Directory:** `bot-backend`
+2. **Build:** `npm run build` | **Start:** `npm start`
+3. Volume: mount `/data` → `PERSISTENT_DATA_DIR=/data`
 
 ---
 
@@ -70,7 +77,7 @@ API: `GET /api/history`
 2. **Root Directory:** `web-frontend`
 3. Framework: Next.js (detecção automática)
 4. Variável de ambiente:
-   - `NEXT_PUBLIC_API_URL` = URL pública do Railway (ex: `https://xxx.up.railway.app`)
+   - `NEXT_PUBLIC_API_URL` = URL pública do backend (ex: `https://lol-match-monitor.onrender.com`)
 
 ---
 

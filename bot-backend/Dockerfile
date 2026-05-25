@@ -20,11 +20,9 @@ RUN apt-get update \
     xdg-utils \
   && rm -rf /var/lib/apt/lists/*
 
-ENV NODE_ENV=production
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 ENV PERSISTENT_DATA_DIR=/app/data
-ENV PORT=4000
 
 WORKDIR /app
 
@@ -33,6 +31,11 @@ RUN npm ci
 
 COPY . .
 RUN npm run build
+
+RUN npm prune --omit=dev && npm cache clean --force
+
+ENV NODE_ENV=production
+ENV PORT=4000
 
 RUN mkdir -p /app/data
 
