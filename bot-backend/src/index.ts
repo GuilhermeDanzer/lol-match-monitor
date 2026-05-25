@@ -2,6 +2,7 @@ import "@/loadEnv";
 import cors from "cors";
 import express from "express";
 import cron from "node-cron";
+import QRCode from "qrcode";
 import { buildHistoryResponse } from "@/lib/historyStats";
 import { ensureJourneyBackfilled } from "@/lib/journeyBackfill";
 import { ensureJourneySeeded } from "@/lib/journeySeed";
@@ -9,7 +10,7 @@ import { ensureJourneyExists } from "@/lib/journeyStore";
 import { ensureStoreExists } from "@/lib/matchStore";
 import { sendJourneyReport, syncRankedMatches } from "@/services/monitor";
 import { getConfiguredGameName } from "@/services/riot";
-import { initWhatsAppClient } from "@/services/whatsapp";
+import { getCurrentQrString, initWhatsAppClient } from "@/services/whatsapp";
 
 const port = Number(process.env.PORT) || 4000;
 const hostname = process.env.HOSTNAME ?? "0.0.0.0";
@@ -43,6 +44,38 @@ app.use(express.json());
 
 app.get("/health", (_req, res) => {
   res.json({ ok: true });
+});
+
+/** QR Code WhatsApp para escaneio no navegador (Render/cloud) */
+app.get("/api/qr", async (_req, res) => {
+  try {
+    const qr = getCurrentQrString();
+    if (!qr) {
+      res
+        .status(200)
+        .type("html")
+        .send(
+          "<!DOCTYPE html><html><body style='font-family:sans-serif;text-align:center;padding:2rem'><h1>WhatsApp</h1><p>Ja conectado ou QR indisponivel no momento.</p></body></html>",
+        );
+      return;
+    }
+
+    const dataUrl = await QRCode.toDataURL(qr);
+    res.type("html").send(`<!DOCTYPE html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>WhatsApp QR</title></head>
+<body style="background:#0a0a0a;color:#fafafa;font-family:system-ui,sans-serif;text-align:center;padding:2rem">
+  <h1>Escaneie o QR Code</h1>
+  <p>WhatsApp &gt; Aparelhos conectados &gt; Conectar aparelho</p>
+  <img src="${dataUrl}" alt="QR Code WhatsApp" width="320" height="320" style="margin:1rem auto;border:8px solid #fff;border-radius:8px"/>
+  <p style="color:#888;font-size:0.875rem">Atualize esta pagina se o QR expirar.</p>
+</body>
+</html>`);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Erro desconhecido";
+    console.error("[GET /api/qr]", message);
+    res.status(500).send(`Erro ao gerar QR: ${message}`);
+  }
 });
 
 /** Histórico acumulado (journey.json) para o frontend Vercel */
@@ -84,7 +117,7 @@ async function bootstrap(): Promise<void> {
 
   app.listen(port, hostname, () => {
     console.log(`\n🤖 Bot backend em http://${hostname}:${port}`);
-    console.log(`📡 API: GET /api/history`);
+    console.log(`📡 API: GET /api/history | GET /api/qr`);
     console.log("📋 Aguardando conexão do WhatsApp...\n");
   });
 }

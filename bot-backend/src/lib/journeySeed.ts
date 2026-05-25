@@ -71,6 +71,7 @@ export async function seedJourneyFromRiot(
           matchMaxDamage: data.matchMaxDamage,
           gameDuration: data.gameDuration,
           gameMode: data.gameMode,
+          team: data.team,
           tier: rankedStats?.tier ?? "",
           rank: rankedStats?.rank ?? "",
           leaguePoints: rankedStats?.leaguePoints ?? 0,

@@ -42,6 +42,7 @@ function journeyToMatchMetadata(match: JourneyMatch): MatchMetadata {
     gameDuration: match.gameDuration,
     gameCreation: match.timestamp,
     gameMode: GAME_MODE_LABELS[match.gameMode] ?? match.gameMode,
+    team: match.team ?? [],
   };
 }
 

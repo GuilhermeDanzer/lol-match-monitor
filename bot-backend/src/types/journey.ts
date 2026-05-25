@@ -1,3 +1,5 @@
+import type { TeamDamageEntry } from "@/types/team";
+
 /** Partida ranqueada registrada no histórico acumulado */
 export interface JourneyMatch {
   matchId: string;
@@ -11,6 +13,7 @@ export interface JourneyMatch {
   matchMaxDamage: number;
   gameDuration: number;
   gameMode: string;
+  team: TeamDamageEntry[];
   tier: string;
   rank: string;
   leaguePoints: number;

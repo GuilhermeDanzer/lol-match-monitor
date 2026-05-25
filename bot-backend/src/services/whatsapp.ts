@@ -1,5 +1,4 @@
 import { getWhatsAppAuthPath } from "@/lib/paths";
-import qrcode from "qrcode-terminal";
 import type { Chat, Message } from "whatsapp-web.js";
 import { Client, LocalAuth } from "whatsapp-web.js";
 import {
@@ -9,6 +8,11 @@ import {
 
 let client: Client | null = null;
 let isReady = false;
+let currentQrString: string | null = null;
+
+export function getCurrentQrString(): string | null {
+  return currentQrString;
+}
 
 function getCommandPrefix(): string {
   return process.env.WHATSAPP_COMMAND_PREFIX ?? "!";
@@ -20,7 +24,6 @@ function isTargetGroup(msg: Message, chat: Chat): boolean {
   if (!configuredId) return chat.isGroup;
 
   const chatId = chat.id._serialized;
-  // Em grupos, msg.from também costuma ser o ID do grupo (@g.us)
   return (
     chat.isGroup &&
     (chatId === configuredId || msg.from === configuredId)
@@ -31,7 +34,6 @@ async function replyInChat(msg: Message, chat: Chat, text: string): Promise<void
   try {
     await msg.reply(text);
   } catch {
-    // Fallback se reply falhar no grupo
     if (client) {
       await client.sendMessage(chat.id._serialized, text);
     }
@@ -49,8 +51,6 @@ async function onIncomingMessage(msg: Message): Promise<void> {
     return;
   }
 
-  // Mensagens enviadas pela própria conta (fromMe) são ignoradas,
-  // EXCETO comandos — assim você pode testar digitando !status no grupo.
   if (msg.fromMe && !isCommandMessage(body)) {
     return;
   }
@@ -68,8 +68,7 @@ async function onIncomingMessage(msg: Message): Promise<void> {
 
 /**
  * Inicializa o cliente WhatsApp com LocalAuth (sessão em disco).
- * Caminho: {PERSISTENT_DATA_DIR}/.wwebjs_auth — configure volume no Railway/Render
- * para não precisar escanear o QR Code a cada deploy.
+ * QR Code: acesse GET /api/qr no navegador (Render/logs não exibem ASCII).
  */
 export function initWhatsAppClient(): Client {
   if (client) return client;
@@ -92,20 +91,22 @@ export function initWhatsAppClient(): Client {
   });
 
   client.on("qr", (qr) => {
-    console.log("\n📱 Escaneie o QR Code abaixo com o WhatsApp:\n");
-    qrcode.generate(qr, { small: true });
+    currentQrString = qr;
+    console.log("[WhatsApp] QR pendente. Abra GET /api/qr no navegador para escanear.");
   });
 
   client.on("ready", () => {
     isReady = true;
+    currentQrString = null;
     const prefix = getCommandPrefix();
     const groupId = process.env.WHATSAPP_GROUP_ID ?? "(não configurado)";
     console.log("✅ WhatsApp conectado!");
     console.log(`💬 Grupo monitorado: ${groupId}`);
-    console.log(`💬 Comandos: ${prefix}status | ${prefix}historico | ${prefix}jornada | ${prefix}ajuda`);
+    console.log(
+      `💬 Comandos: ${prefix}status | ${prefix}historico | ${prefix}jornada | ${prefix}site | ${prefix}ajuda`,
+    );
   });
 
-  // message_create captura TODAS as mensagens, inclusive as que você mesmo envia
   client.on("message_create", (msg) => {
     void onIncomingMessage(msg);
   });
@@ -117,23 +118,23 @@ export function initWhatsAppClient(): Client {
   client.on("auth_failure", (msg) => {
     console.error("❌ Falha na autenticação do WhatsApp:", msg);
     isReady = false;
+    currentQrString = null;
   });
 
   client.on("disconnected", (reason) => {
     console.warn("⚠️ WhatsApp desconectado:", reason);
     isReady = false;
+    currentQrString = null;
   });
 
   client.initialize();
   return client;
 }
 
-/** Verifica se o bot está pronto para enviar mensagens */
 export function isWhatsAppReady(): boolean {
   return isReady;
 }
 
-/** Envia uma mensagem de texto para o grupo configurado no .env.local */
 export async function sendGroupMessage(message: string): Promise<void> {
   const groupId = process.env.WHATSAPP_GROUP_ID;
 

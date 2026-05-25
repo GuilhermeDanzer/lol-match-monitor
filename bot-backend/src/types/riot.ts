@@ -36,6 +36,8 @@ export interface RankedStats extends RankedSnapshot {
   winRatePercent: number;
 }
 
+import type { TeamDamageEntry } from "@/types/team";
+
 /** Metadados resumidos de uma partida (Match-V5) */
 export interface MatchMetadata {
   matchId: string;
@@ -49,6 +51,7 @@ export interface MatchMetadata {
   gameDuration: number;
   gameCreation: number;
   gameMode: string;
+  team: TeamDamageEntry[];
 }
 
 /** Resposta completa do endpoint Match-V5 */
@@ -67,6 +70,7 @@ export interface MatchDetailResponse {
 export interface MatchParticipant {
   puuid: string;
   championName: string;
+  teamId: number;
   kills: number;
   deaths: number;
   assists: number;

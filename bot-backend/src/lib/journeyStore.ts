@@ -22,6 +22,7 @@ function normalizeJourneyMatch(raw: Partial<JourneyMatch> & { matchId: string })
     matchMaxDamage: raw.matchMaxDamage ?? 0,
     gameDuration: raw.gameDuration ?? 0,
     gameMode: raw.gameMode ?? "Ranqueada",
+    team: Array.isArray(raw.team) ? raw.team : [],
     tier: raw.tier ?? "",
     rank: raw.rank ?? "",
     leaguePoints: raw.leaguePoints ?? 0,

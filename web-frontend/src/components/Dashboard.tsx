@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { DamageBar } from "@/components/DamageBar";
+import { TeamComposition } from "@/components/TeamComposition";
 import { EstatisticasGerais } from "@/components/EstatisticasGerais";
 import type { HistoryApiResponse } from "@/types/history";
 import type { MatchMetadata } from "@/types/riot";
@@ -68,6 +69,8 @@ function MatchCard({ match }: { match: MatchMetadata }) {
       </div>
 
       <DamageBar damage={match.damage} matchMaxDamage={match.matchMaxDamage} />
+
+      <TeamComposition team={match.team ?? []} />
 
       <div className="mt-3 flex items-center justify-between border-t border-zinc-800 pt-3 text-sm text-zinc-400">
         <span>⏱ {formatDuration(match.gameDuration)}</span>

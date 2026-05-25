@@ -96,21 +96,42 @@ export function formatEloCompactLabel(snapshot: RankedSnapshot): string {
 }
 
 /**
- * PDL numérico único para gráficos: (TierWeight * 400) + (RankWeight * 100) + PDL
+ * PDL numérico para gráficos: TierBase + RankBase + LP
+ * IRON=0 … CHALLENGER=3600 | IV=0, III=100, II=200, I=300
  */
+const TIER_BASE: Record<string, number> = {
+  IRON: 0,
+  BRONZE: 400,
+  SILVER: 800,
+  GOLD: 1200,
+  PLATINUM: 1600,
+  EMERALD: 2000,
+  DIAMOND: 2400,
+  MASTER: 2800,
+  GRANDMASTER: 3200,
+  CHALLENGER: 3600,
+};
+
+const RANK_BASE: Record<string, number> = {
+  IV: 0,
+  III: 100,
+  II: 200,
+  I: 300,
+};
+
 export function computePdlNumeric(
   tier: string,
   rank: string,
   leaguePoints: number,
 ): number {
-  const tierWeight = TIER_WEIGHT[tier] ?? 0;
+  const tierBase = TIER_BASE[tier] ?? 0;
 
   if (HIGH_ELO_TIERS.has(tier)) {
-    return tierWeight * 400 + leaguePoints;
+    return tierBase + leaguePoints;
   }
 
-  const rankWeight = RANK_WEIGHT[rank] ?? 0;
-  return tierWeight * 400 + rankWeight * 100 + leaguePoints;
+  const rankBase = RANK_BASE[rank] ?? 0;
+  return tierBase + rankBase + leaguePoints;
 }
 
 const TIER_LETTER: Record<string, string> = {

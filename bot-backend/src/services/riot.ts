@@ -1,4 +1,5 @@
 import axios, { AxiosError } from "axios";
+import type { TeamDamageEntry } from "@/types/team";
 import type {
   LeagueEntryV4,
   MatchDetailResponse,
@@ -109,6 +110,28 @@ export async function getMatchDetails(
   return riotGet<MatchDetailResponse>(url);
 }
 
+/** Monta array de dano do time aliado */
+export function extractTeamDamage(
+  match: MatchDetailResponse,
+  puuid: string,
+): TeamDamageEntry[] {
+  const player = match.info.participants.find((p) => p.puuid === puuid);
+  if (!player) {
+    throw new Error(
+      `Jogador não encontrado na partida ${match.metadata.matchId}`,
+    );
+  }
+
+  return match.info.participants
+    .filter((p) => p.teamId === player.teamId)
+    .map((p) => ({
+      championName: p.championName,
+      damageDealt: p.totalDamageDealtToChampions ?? 0,
+      isPlayer: p.puuid === puuid,
+    }))
+    .sort((a, b) => b.damageDealt - a.damageDealt);
+}
+
 /** Extrai os dados relevantes do jogador monitorado em uma partida */
 export function extractPlayerMatchData(
   match: MatchDetailResponse,
@@ -137,6 +160,7 @@ export function extractPlayerMatchData(
     gameDuration: match.info.gameDuration,
     gameCreation: match.info.gameCreation,
     gameMode: match.info.gameMode,
+    team: extractTeamDamage(match, puuid),
   };
 }
 

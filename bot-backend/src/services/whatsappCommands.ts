@@ -25,6 +25,7 @@ const COMMANDS = [
   "history",
   "lol",
   "jornada",
+  "site",
   "ajuda",
   "help",
 ] as const;
@@ -135,6 +136,18 @@ export async function handleWhatsAppCommand(
           rankedStats,
         }),
       );
+      return;
+    }
+
+    if (command === "site") {
+      const url = process.env.FRONTEND_URL?.trim();
+      if (!url) {
+        await reply(
+          "🌐 FRONTEND_URL não configurada no servidor. Defina a URL do site no Render.",
+        );
+        return;
+      }
+      await reply(`🌐 Acompanhe o vexame ao vivo: ${url}`);
     }
   } catch (error) {
     const message =

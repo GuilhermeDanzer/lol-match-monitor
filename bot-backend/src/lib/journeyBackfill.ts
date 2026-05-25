@@ -17,7 +17,10 @@ function sleep(ms: number): Promise<void> {
 
 /** Partidas antigas sem campos novos do monitor */
 export function matchNeedsEnrichment(match: JourneyMatch): boolean {
-  return match.gameDuration <= 0 && match.matchMaxDamage <= 0;
+  return (
+    (match.gameDuration <= 0 && match.matchMaxDamage <= 0) ||
+    match.team.length === 0
+  );
 }
 
 let backfillPromise: Promise<{ updated: number; failed: number }> | null = null;
@@ -63,6 +66,7 @@ export async function backfillJourneyMatches(): Promise<{
           matchMaxDamage: data.matchMaxDamage,
           gameDuration: data.gameDuration,
           gameMode: data.gameMode,
+          team: data.team,
           timestamp: data.gameCreation,
         });
 

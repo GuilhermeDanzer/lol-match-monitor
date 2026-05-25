@@ -71,7 +71,7 @@ function formatYAxisTick(value: number, labelByPdl: Map<number, string>): string
   let bestDiff = Infinity;
   for (const [pdl, label] of labelByPdl) {
     const diff = Math.abs(pdl - value);
-    if (diff < bestDiff && diff <= 25) {
+    if (diff < bestDiff && diff <= 50) {
       bestDiff = diff;
       closest = label;
     }
@@ -183,10 +183,7 @@ export function TierGraph({ data }: TierGraphProps) {
               tickLine={false}
             />
             <YAxis
-              domain={[
-                (min: number) => min - 30,
-                (max: number) => max + 30,
-              ]}
+              domain={["dataMin - 50", "dataMax + 50"]}
               ticks={yTicks}
               stroke="#71717a"
               tick={{ fill: "#d4d4d8", fontSize: 11 }}

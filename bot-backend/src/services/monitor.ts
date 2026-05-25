@@ -113,6 +113,7 @@ export async function syncRankedMatches(): Promise<void> {
         matchMaxDamage: matchData.matchMaxDamage,
         gameDuration: matchData.gameDuration,
         gameMode: matchData.gameMode,
+        team: matchData.team,
         tier: rankedAfter?.tier ?? "",
         rank: rankedAfter?.rank ?? "",
         leaguePoints: rankedAfter?.leaguePoints ?? 0,

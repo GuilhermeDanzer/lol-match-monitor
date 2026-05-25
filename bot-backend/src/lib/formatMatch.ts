@@ -96,6 +96,7 @@ export function formatHelpCommand(gameName: string): string {
     "*!status* / *!lol* — última partida + elo, PDL, win rate e partidas nas últimas 6h",
     "*!historico* / *!history* — últimas 5 partidas ranqueadas",
     "*!jornada* — estatísticas gerais da temporada monitorada",
+    "*!site* — link do dashboard web ao vivo",
     "*!ajuda* / *!help* — esta mensagem",
     "",
     "O bot envia um *resumo automático a cada 6 horas* com as partidas ranqueadas do período.",

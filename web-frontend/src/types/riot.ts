@@ -1,3 +1,5 @@
+import type { TeamDamageEntry } from "@/types/team";
+
 /** Resposta da Account-V1 ao buscar por Riot ID */
 export interface RiotAccount {
   puuid: string;
@@ -49,6 +51,7 @@ export interface MatchMetadata {
   gameDuration: number;
   gameCreation: number;
   gameMode: string;
+  team: TeamDamageEntry[];
 }
 
 /** Resposta completa do endpoint Match-V5 */
