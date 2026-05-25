@@ -79,10 +79,18 @@ app.get("/api/qr", async (_req, res) => {
         .status(200)
         .type("html")
         .send(`<!DOCTYPE html>
-<html lang="pt-BR"><head><meta charset="utf-8"><meta http-equiv="refresh" content="8"><title>WhatsApp</title></head>
+<html lang="pt-BR"><head><meta charset="utf-8"><title>WhatsApp</title></head>
 <body style="font-family:system-ui,sans-serif;text-align:center;padding:2rem;background:#0a0a0a;color:#fafafa">
 <h1>Aguardando QR...</h1>
-<p>O Chromium esta iniciando. Esta pagina atualiza sozinha em 8s.</p>
+<p>O Chromium esta iniciando. Esta pagina atualiza quando o QR ficar pronto.</p>
+<script>
+setInterval(async () => {
+  try {
+    const s = await (await fetch("/api/whatsapp/status")).json();
+    if (s.ready || s.awaitingQr) location.reload();
+  } catch {}
+}, 5000);
+</script>
 </body></html>`);
       return;
     }
@@ -92,14 +100,26 @@ app.get("/api/qr", async (_req, res) => {
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="refresh" content="15">
   <title>WhatsApp QR</title>
 </head>
 <body style="background:#0a0a0a;color:#fafafa;font-family:system-ui,sans-serif;text-align:center;padding:2rem">
   <h1>Escaneie o QR Code</h1>
   <p>WhatsApp &gt; Aparelhos conectados &gt; Conectar aparelho</p>
-  <p style="color:#f59e0b;font-size:0.875rem">O QR expira em ~20s — esta pagina recarrega a cada 15s</p>
+  <p style="color:#888;font-size:0.875rem">Escaneie com calma — a pagina nao recarrega sozinha.</p>
   <img src="${dataUrl}" alt="QR Code WhatsApp" width="320" height="320" style="margin:1rem auto;border:8px solid #fff;border-radius:8px;display:block"/>
+  <p style="margin-top:1.5rem">
+    <button type="button" onclick="location.reload()" style="cursor:pointer;padding:0.6rem 1.2rem;font-size:1rem;border-radius:8px;border:none;background:#25D366;color:#fff">
+      QR expirou? Clique para atualizar
+    </button>
+  </p>
+  <script>
+  setInterval(async () => {
+    try {
+      const s = await (await fetch("/api/whatsapp/status")).json();
+      if (s.ready) location.reload();
+    } catch {}
+  }, 5000);
+  </script>
 </body>
 </html>`);
   } catch (error) {

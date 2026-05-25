@@ -66,7 +66,7 @@ API: `GET /api/history` | WhatsApp QR: `GET /api/qr` | Status WA: `GET /api/what
 
 ### WhatsApp no Render
 
-1. Abra **`https://lol-match-monitor.onrender.com/api/qr`** e escaneie com o celular (QR expira ~20s; a pagina recarrega sozinha apos o deploy).
+1. Abra **`https://lol-match-monitor.onrender.com/api/qr`** e escaneie com o celular (a pagina **nao** recarrega sozinha — use o botao se o QR expirar).
 2. No Render → **Environment**, configure `WHATSAPP_GROUP_ID` = ID do grupo (`120363xxxxxxxx@g.us`).
 3. Para **nao escanear a cada deploy**, adicione **Persistent Disk** montado em `/app` (plano pago) — a sessao fica em `/app/.wwebjs_auth`.
 4. Confirme conexao: `GET /api/whatsapp/status` → `"ready": true`.
