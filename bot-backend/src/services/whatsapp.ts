@@ -1,3 +1,7 @@
+/**
+ * Cliente WhatsApp via @whiskeysockets/baileys (WebSocket, sem Puppeteer).
+ * QR/código em GET /api/qr — sessão em auth_info_baileys.
+ */
 import { getWhatsAppAuthPath } from "@/lib/paths";
 import {
   handleWhatsAppCommand,
@@ -90,12 +94,25 @@ function cancelReconnect(): void {
   }
 }
 
-function getMessageBody(message: proto.IMessage | null | undefined): string | null {
-  if (!message) return null;
-  if (message.conversation) return message.conversation;
-  if (message.extendedTextMessage?.text) return message.extendedTextMessage.text;
-  if (message.imageMessage?.caption) return message.imageMessage.caption;
-  return null;
+async function handleIncomingMessage(msg: proto.IWebMessageInfo): Promise<void> {
+  const jid = msg.key.remoteJid;
+  if (!jid || !isTargetGroup(jid)) return;
+
+  const body =
+    msg.message?.conversation ??
+    msg.message?.extendedTextMessage?.text ??
+    msg.message?.imageMessage?.caption;
+  const trimmed = body?.trim();
+  if (!trimmed || !isCommandMessage(trimmed)) return;
+
+  if (msg.key.fromMe && !isCommandMessage(trimmed)) return;
+
+  console.log(`[WhatsApp] Comando recebido: "${trimmed}" | grupo: ${jid}`);
+
+  await handleWhatsAppCommand(trimmed, async (text) => {
+    if (!sock) return;
+    await sock.sendMessage(jid, { text });
+  });
 }
 
 function isTargetGroup(jid: string | null | undefined): boolean {
@@ -124,23 +141,6 @@ function scheduleReconnect(reason: string, delayMs = 15_000): void {
     reconnectTimer = null;
     void startWhatsApp();
   }, delayMs);
-}
-
-async function handleIncomingMessage(msg: proto.IWebMessageInfo): Promise<void> {
-  const jid = msg.key.remoteJid;
-  if (!jid || !isTargetGroup(jid)) return;
-
-  const body = getMessageBody(msg.message)?.trim();
-  if (!body || !isCommandMessage(body)) return;
-
-  if (msg.key.fromMe && !isCommandMessage(body)) return;
-
-  console.log(`[WhatsApp] Comando recebido: "${body}" | grupo: ${jid}`);
-
-  await handleWhatsAppCommand(body, async (text) => {
-    if (!sock) return;
-    await sock.sendMessage(jid, { text }, { quoted: msg });
-  });
 }
 
 async function requestPairingCodeOnce(
@@ -262,10 +262,12 @@ async function startWhatsApp(): Promise<void> {
       }
     });
 
-    socket.ev.on("messages.upsert", ({ messages, type }) => {
-      if (type !== "notify") return;
-      for (const message of messages) {
-        void handleIncomingMessage(message);
+    socket.ev.on("messages.upsert", async (m) => {
+      if (m.type !== "notify" || m.messages.length === 0) return;
+
+      for (const msg of m.messages) {
+        if (!msg.message) continue;
+        await handleIncomingMessage(msg);
       }
     });
 

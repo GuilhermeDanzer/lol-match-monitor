@@ -1,23 +1,16 @@
-FROM node:22-bookworm-slim
-
-RUN apt-get update \
-  && apt-get install -y --no-install-recommends ca-certificates \
-  && rm -rf /var/lib/apt/lists/*
-
-ENV PERSISTENT_DATA_DIR=/app
+FROM node:20-alpine
 
 WORKDIR /app
+
+ENV PERSISTENT_DATA_DIR=/app
+ENV NODE_ENV=production
+ENV PORT=4000
 
 COPY package.json package-lock.json* ./
 RUN npm ci
 
 COPY . .
-RUN npm run build
-
-RUN npm prune --omit=dev && npm cache clean --force
-
-ENV NODE_ENV=production
-ENV PORT=4000
+RUN npm run build && npm prune --omit=dev && npm cache clean --force
 
 RUN mkdir -p /app/data
 

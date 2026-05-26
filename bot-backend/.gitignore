@@ -4,6 +4,7 @@ dist
 .env.local
 .wwebjs_auth
 .wwebjs_cache
+auth_info_baileys
 data/lastMatch.json
 data/journey.json
 *.log
