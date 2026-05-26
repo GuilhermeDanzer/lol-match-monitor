@@ -64,20 +64,21 @@ Em cada push/PR para `main`, o workflow `.github/workflows/ci.yml` valida `npm r
 Healthcheck: `GET /health`  
 API: `GET /api/history` | WhatsApp QR: `GET /api/qr` | Status WA: `GET /api/whatsapp/status`
 
-### WhatsApp no Render (Baileys — sem Chromium)
+### WhatsApp no Render (Baileys)
 
-1. No Render → **Environment**:
-   - `WHATSAPP_PHONE_NUMBER` = seu celular (ex: `5499912345678`, sem `+`)
+**Recomendado — modo QR** (evita "nao foi possivel conectar"):
+
+1. Render → **Environment**:
+   - `WHATSAPP_PAIRING_METHOD` = `qr`
+   - **Remova** `WHATSAPP_PHONE_NUMBER` (deixe vazio)
    - `WHATSAPP_GROUP_ID` = ID do grupo (`120363...@g.us`)
-2. Aguarde o deploy terminar (**nao faca push enquanto conecta**).
-3. Abra **`https://lol-match-monitor.onrender.com/api/qr`** — codigo de 8 letras.
-4. No celular: **Aparelhos conectados → Conectar aparelho → Conectar com numero de telefone**.
-5. Confirme: `GET /api/whatsapp/status` → `"ready": true`, `"engine": "baileys"`.
+2. Deploy terminar → abra `/api/qr` → **Limpar sessao** → escaneie o QR em ate 60s.
+3. Confirme: `GET /api/whatsapp/status` → `"ready": true`, `"pairingMethod": "qr"`.
 
-**Alternativa (QR):** deixe `WHATSAPP_PHONE_NUMBER` vazio e escaneie o QR em `/api/qr`.
+**Modo codigo:** `WHATSAPP_PAIRING_METHOD=code` + `WHATSAPP_PHONE_NUMBER` = numero exato do WhatsApp (sem `+`).
 
-- **Persistent Disk** em `/app` (pago) evita reconectar a cada deploy
-- `SIGTERM` nos logs = deploy normal do Render
+- Muitas falhas seguidas → espere **30 min** (bloqueio temporario do WhatsApp).
+- **Persistent Disk** em `/app` evita reconectar a cada deploy.
 
 ## Backend (Railway) — alternativa
 

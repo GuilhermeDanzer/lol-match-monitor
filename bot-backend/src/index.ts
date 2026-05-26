@@ -76,8 +76,10 @@ app.get("/api/qr/data", async (_req, res) => {
       res.json({
         ready: false,
         pairingCodeMode: true,
+        pairingMethod: status.pairingMethod,
         pairingCode: status.pairingCode,
         phoneMasked: status.phoneMasked,
+        pairingGraceSecondsLeft: status.pairingGraceSecondsLeft,
       });
       return;
     }
@@ -178,7 +180,10 @@ app.get("/api/qr", async (_req, res) => {
       lastCode = d.pairingCode;
       document.getElementById("pairCode").textContent = d.pairingCode;
       document.getElementById("hint").textContent =
-        "Codigo atualizado — digite no WhatsApp do celular";
+        "Digite AGORA no celular (mesmo codigo por ~3 min, nao clique em reset)";
+    } else if (d.pairingCode) {
+      document.getElementById("hint").textContent =
+        "Use o codigo acima — ainda valido por " + (d.pairingGraceSecondsLeft || "?") + "s";
     } else if (!d.pairingCode) {
       document.getElementById("hint").textContent =
         "Gerando codigo... aguarde ~30s";
@@ -208,8 +213,10 @@ app.get("/api/qr", async (_req, res) => {
         document.getElementById("qr").src = d.dataUrl;
         document.getElementById("qr").style.display = "block";
         document.getElementById("title").textContent = "Escaneie o QR Code";
+        document.getElementById("subtitle").textContent =
+          "Aparelhos conectados > Conectar aparelho (escaneie, nao use codigo)";
         document.getElementById("hint").textContent =
-          "QR #" + d.qrId + " — escaneie assim que aparecer (atualiza sozinho se expirar)";
+          "QR #" + d.qrId + " — escaneie em ate 60s (nao recarregue a pagina)";
       }
     } catch {}
   }
