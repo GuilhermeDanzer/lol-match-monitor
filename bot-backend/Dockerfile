@@ -1,5 +1,9 @@
 FROM node:20-alpine
 
+RUN apk add --no-cache git \
+  && git config --global url."https://github.com/".insteadOf "ssh://git@github.com/" \
+  && git config --global url."https://github.com/".insteadOf "git@github.com:"
+
 WORKDIR /app
 
 ENV PERSISTENT_DATA_DIR=/app
