@@ -6,9 +6,12 @@ export function getPersistentDataDir(): string {
   return dir ? path.resolve(dir) : process.cwd();
 }
 
-/** Sessão Baileys (useMultiFileAuthState) */
 export function getWhatsAppAuthPath(): string {
-  return path.join(getPersistentDataDir(), "auth_info_baileys");
+  return path.join(getPersistentDataDir(), ".wwebjs_auth");
+}
+
+export function getWhatsAppCachePath(): string {
+  return path.join(getPersistentDataDir(), ".wwebjs_cache");
 }
 
 /**

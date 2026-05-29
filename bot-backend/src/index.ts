@@ -16,14 +16,29 @@ import {
   getWhatsAppStatus,
   initWhatsAppClient,
   resetWhatsAppSession,
-  shutdownWhatsApp,
 } from "@/services/whatsapp";
 
 const port = Number(process.env.PORT) || 4000;
 const hostname = process.env.HOSTNAME ?? "0.0.0.0";
 
-/** Log de rejeições não tratadas (evita crash silencioso) */
+/** Evita crash loop por erros conhecidos do Puppeteer/Chromium no Render */
 process.on("unhandledRejection", (reason) => {
+  const message = String(
+    reason instanceof Error ? reason.message : reason,
+  );
+  const name = reason instanceof Error ? reason.name : "";
+  const isPuppeteerNoise =
+    (message.includes("Protocol error") &&
+      (message.includes("Network.getResponseBody") ||
+        message.includes("Runtime.evaluate") ||
+        message.includes("Target closed"))) ||
+    name === "TargetCloseError" ||
+    message.includes("Target closed");
+
+  if (isPuppeteerNoise) {
+    console.warn("[WhatsApp] Erro Puppeteer ignorado:", message);
+    return;
+  }
   console.error("[unhandledRejection]", reason);
 });
 
@@ -63,24 +78,12 @@ app.get("/api/whatsapp/status", (_req, res) => {
   res.json(getWhatsAppStatus());
 });
 
-/** QR/codigo atual em JSON (pagina /api/qr atualiza sem reload) */
+/** QR atual em JSON (pagina /api/qr atualiza a imagem sem reload) */
 app.get("/api/qr/data", async (_req, res) => {
   try {
     const status = getWhatsAppStatus();
     if (status.ready) {
       res.json({ ready: true, awaitingQr: false, qrId: status.qrId });
-      return;
-    }
-
-    if (status.pairingCodeMode) {
-      res.json({
-        ready: false,
-        pairingCodeMode: true,
-        pairingMethod: status.pairingMethod,
-        pairingCode: status.pairingCode,
-        phoneMasked: status.phoneMasked,
-        pairingGraceSecondsLeft: status.pairingGraceSecondsLeft,
-      });
       return;
     }
 
@@ -149,46 +152,17 @@ app.get("/api/qr", async (_req, res) => {
 </head>
 <body style="background:#0a0a0a;color:#fafafa;font-family:system-ui,sans-serif;text-align:center;padding:2rem">
   <h1 id="title">Conectar WhatsApp</h1>
-  <p id="subtitle">WhatsApp &gt; Aparelhos conectados &gt; Conectar aparelho</p>
-  <p id="hint" style="color:#888;font-size:0.875rem">Iniciando...</p>
-  <div id="codeBox" style="display:none;margin:1.5rem auto;padding:1.5rem;max-width:20rem;background:#14532d;border-radius:12px">
-    <p style="margin:0 0 0.5rem;font-size:0.875rem;color:#bbf7d0">Codigo de pareamento (valido ~3 min)</p>
-    <p id="pairCode" style="margin:0;font-size:2.5rem;font-weight:700;letter-spacing:0.35em;font-family:monospace"></p>
-    <p id="phoneHint" style="margin:0.75rem 0 0;font-size:0.75rem;color:#86efac"></p>
-  </div>
+  <p>WhatsApp &gt; Aparelhos conectados &gt; Conectar aparelho</p>
+  <p id="hint" style="color:#888;font-size:0.875rem">Aguardando QR...</p>
   <img id="qr" alt="QR Code WhatsApp" width="320" height="320"
     style="margin:1rem auto;border:8px solid #fff;border-radius:8px;display:none"/>
   <p style="margin-top:1.5rem">
     <button type="button" id="resetBtn" style="cursor:pointer;padding:0.6rem 1.2rem;font-size:1rem;border-radius:8px;border:none;background:#dc2626;color:#fff">
-      Limpar sessao e tentar de novo
+      Limpar sessao e gerar novo QR
     </button>
   </p>
   <script>
   let lastQrId = null;
-  let lastCode = null;
-
-  function showCodeMode(d) {
-    document.getElementById("qr").style.display = "none";
-    document.getElementById("codeBox").style.display = "block";
-    document.getElementById("title").textContent = "Digite o codigo no celular";
-    document.getElementById("subtitle").textContent =
-      "Aparelhos conectados > Conectar aparelho > Conectar com numero de telefone";
-    if (d.phoneMasked) {
-      document.getElementById("phoneHint").textContent = "Numero: " + d.phoneMasked;
-    }
-    if (d.pairingCode && d.pairingCode !== lastCode) {
-      lastCode = d.pairingCode;
-      document.getElementById("pairCode").textContent = d.pairingCode;
-      document.getElementById("hint").textContent =
-        "Digite AGORA no celular (mesmo codigo por ~3 min, nao clique em reset)";
-    } else if (d.pairingCode) {
-      document.getElementById("hint").textContent =
-        "Use o codigo acima — ainda valido por " + (d.pairingGraceSecondsLeft || "?") + "s";
-    } else if (!d.pairingCode) {
-      document.getElementById("hint").textContent =
-        "Gerando codigo... aguarde ~30s";
-    }
-  }
 
   async function refreshQr() {
     try {
@@ -197,11 +171,6 @@ app.get("/api/qr", async (_req, res) => {
         location.reload();
         return;
       }
-      if (d.pairingCodeMode) {
-        showCodeMode(d);
-        return;
-      }
-      document.getElementById("codeBox").style.display = "none";
       if (!d.awaitingQr || !d.dataUrl) {
         document.getElementById("hint").textContent =
           "Chromium iniciando... aguarde o QR aparecer.";
@@ -213,10 +182,8 @@ app.get("/api/qr", async (_req, res) => {
         document.getElementById("qr").src = d.dataUrl;
         document.getElementById("qr").style.display = "block";
         document.getElementById("title").textContent = "Escaneie o QR Code";
-        document.getElementById("subtitle").textContent =
-          "Aparelhos conectados > Conectar aparelho (escaneie, nao use codigo)";
         document.getElementById("hint").textContent =
-          "QR #" + d.qrId + " — escaneie em ate 60s (nao recarregue a pagina)";
+          "QR #" + d.qrId + " — escaneie assim que aparecer (atualiza sozinho se expirar)";
       }
     } catch {}
   }
@@ -225,7 +192,6 @@ app.get("/api/qr", async (_req, res) => {
     document.getElementById("hint").textContent = "Limpando sessao...";
     await fetch("/api/whatsapp/reset", { method: "POST" });
     lastQrId = null;
-    lastCode = null;
     setTimeout(refreshQr, 3000);
   });
 
@@ -278,22 +244,11 @@ async function bootstrap(): Promise<void> {
   console.log("⏰ Cron 1: sincronização ranqueada a cada 15 minutos");
   console.log("⏰ Cron 2: relatório WhatsApp a cada 6 horas");
 
-  const server = app.listen(port, hostname, () => {
+  app.listen(port, hostname, () => {
     console.log(`\n🤖 Bot backend em http://${hostname}:${port}`);
     console.log(`📡 API: GET /api/history | GET /api/qr | GET /api/whatsapp/status`);
     console.log("📋 Aguardando conexão do WhatsApp...\n");
   });
-
-  const shutdown = (signal: string) => {
-    console.log(`[${signal}] Encerrando servidor...`);
-    void (async () => {
-      await shutdownWhatsApp();
-      server.close(() => process.exit(0));
-    })();
-  };
-
-  process.on("SIGTERM", () => shutdown("SIGTERM"));
-  process.on("SIGINT", () => shutdown("SIGINT"));
 }
 
 bootstrap().catch((error) => {

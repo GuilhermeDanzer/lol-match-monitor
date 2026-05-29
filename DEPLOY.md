@@ -64,21 +64,15 @@ Em cada push/PR para `main`, o workflow `.github/workflows/ci.yml` valida `npm r
 Healthcheck: `GET /health`  
 API: `GET /api/history` | WhatsApp QR: `GET /api/qr` | Status WA: `GET /api/whatsapp/status`
 
-### WhatsApp no Render (Baileys)
+### WhatsApp (whatsapp-web.js)
 
-**Recomendado — modo QR** (evita "nao foi possivel conectar"):
+**Local:**
+```bash
+cd bot-backend && npm run dev
+```
+Abra `http://localhost:4000/api/qr` ou escaneie o QR no terminal.
 
-1. Render → **Environment**:
-   - `WHATSAPP_PAIRING_METHOD` = `qr`
-   - **Remova** `WHATSAPP_PHONE_NUMBER` (deixe vazio)
-   - `WHATSAPP_GROUP_ID` = ID do grupo (`120363...@g.us`)
-2. Deploy terminar → abra `/api/qr` → **Limpar sessao** → escaneie o QR em ate 60s.
-3. Confirme: `GET /api/whatsapp/status` → `"ready": true`, `"pairingMethod": "qr"`.
-
-**Modo codigo:** `WHATSAPP_PAIRING_METHOD=code` + `WHATSAPP_PHONE_NUMBER` = numero exato do WhatsApp (sem `+`).
-
-- Muitas falhas seguidas → espere **30 min** (bloqueio temporario do WhatsApp).
-- **Persistent Disk** em `/app` evita reconectar a cada deploy.
+**Render:** escaneie em `/api/qr` após deploy. Sessão em `.wwebjs_auth` (Persistent Disk em `/app` recomendado).
 
 ## Backend (Railway) — alternativa
 
