@@ -9,3 +9,4 @@ auth_info_baileys
 data
 *.log
 .git
+src/scripts/_extract.ts
