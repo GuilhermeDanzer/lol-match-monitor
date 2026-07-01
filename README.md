@@ -6,7 +6,7 @@ Monorepo com frontend (Next.js → **Vercel**) e backend (Express + WhatsApp + C
 
 ```
 lol-match-monitor/
-├── bot-backend/     # API Express, Riot, WhatsApp, crons, journey.json
+├── bot-backend/     # API Express, Riot, WhatsApp, crons, SQLite (journey.db)
 └── web-frontend/    # Next.js (UI apenas)
 ```
 

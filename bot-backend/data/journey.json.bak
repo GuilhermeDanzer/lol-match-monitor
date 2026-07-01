@@ -1,0 +1,3964 @@
+{
+  "matches": [
+    {
+      "matchId": "BR1_3244094549",
+      "timestamp": 1779492930067,
+      "championName": "Ezreal",
+      "kills": 10,
+      "deaths": 3,
+      "assists": 8,
+      "win": true,
+      "damage": 23747,
+      "matchMaxDamage": 23747,
+      "gameDuration": 1299,
+      "gameMode": "CLASSIC",
+      "team": [
+        {
+          "championName": "Ezreal",
+          "damageDealt": 23747,
+          "isPlayer": true
+        },
+        {
+          "championName": "Lux",
+          "damageDealt": 14797,
+          "isPlayer": false
+        },
+        {
+          "championName": "XinZhao",
+          "damageDealt": 12481,
+          "isPlayer": false
+        },
+        {
+          "championName": "JarvanIV",
+          "damageDealt": 10053,
+          "isPlayer": false
+        },
+        {
+          "championName": "Leona",
+          "damageDealt": 6699,
+          "isPlayer": false
+        }
+      ],
+      "tier": "",
+      "rank": "",
+      "leaguePoints": 0,
+      "lpChange": 0,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3244108642",
+      "timestamp": 1779494567721,
+      "championName": "Senna",
+      "kills": 0,
+      "deaths": 0,
+      "assists": 0,
+      "win": true,
+      "damage": 0,
+      "matchMaxDamage": 257,
+      "gameDuration": 71,
+      "gameMode": "CLASSIC",
+      "team": [
+        {
+          "championName": "Sion",
+          "damageDealt": 77,
+          "isPlayer": false
+        },
+        {
+          "championName": "Nocturne",
+          "damageDealt": 0,
+          "isPlayer": false
+        },
+        {
+          "championName": "Veigar",
+          "damageDealt": 0,
+          "isPlayer": false
+        },
+        {
+          "championName": "Senna",
+          "damageDealt": 0,
+          "isPlayer": true
+        },
+        {
+          "championName": "Lux",
+          "damageDealt": 0,
+          "isPlayer": false
+        }
+      ],
+      "tier": "",
+      "rank": "",
+      "leaguePoints": 0,
+      "lpChange": 0,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3244114107",
+      "timestamp": 1779495146864,
+      "championName": "Senna",
+      "kills": 12,
+      "deaths": 2,
+      "assists": 18,
+      "win": true,
+      "damage": 38604,
+      "matchMaxDamage": 43645,
+      "gameDuration": 2012,
+      "gameMode": "CLASSIC",
+      "team": [
+        {
+          "championName": "Senna",
+          "damageDealt": 38604,
+          "isPlayer": true
+        },
+        {
+          "championName": "Urgot",
+          "damageDealt": 25794,
+          "isPlayer": false
+        },
+        {
+          "championName": "Akali",
+          "damageDealt": 21866,
+          "isPlayer": false
+        },
+        {
+          "championName": "Lux",
+          "damageDealt": 18385,
+          "isPlayer": false
+        },
+        {
+          "championName": "Amumu",
+          "damageDealt": 18343,
+          "isPlayer": false
+        }
+      ],
+      "tier": "",
+      "rank": "",
+      "leaguePoints": 0,
+      "lpChange": 0,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3244133517",
+      "timestamp": 1779497483324,
+      "championName": "Senna",
+      "kills": 9,
+      "deaths": 11,
+      "assists": 20,
+      "win": false,
+      "damage": 48169,
+      "matchMaxDamage": 52545,
+      "gameDuration": 2259,
+      "gameMode": "CLASSIC",
+      "team": [
+        {
+          "championName": "Senna",
+          "damageDealt": 48169,
+          "isPlayer": true
+        },
+        {
+          "championName": "Kayn",
+          "damageDealt": 30284,
+          "isPlayer": false
+        },
+        {
+          "championName": "Gragas",
+          "damageDealt": 28441,
+          "isPlayer": false
+        },
+        {
+          "championName": "Naafiri",
+          "damageDealt": 25463,
+          "isPlayer": false
+        },
+        {
+          "championName": "Morgana",
+          "damageDealt": 25303,
+          "isPlayer": false
+        }
+      ],
+      "tier": "",
+      "rank": "",
+      "leaguePoints": 0,
+      "lpChange": 0,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3244158210",
+      "timestamp": 1779500232967,
+      "championName": "Smolder",
+      "kills": 10,
+      "deaths": 9,
+      "assists": 16,
+      "win": false,
+      "damage": 45816,
+      "matchMaxDamage": 45816,
+      "gameDuration": 2189,
+      "gameMode": "CLASSIC",
+      "team": [
+        {
+          "championName": "Smolder",
+          "damageDealt": 45816,
+          "isPlayer": true
+        },
+        {
+          "championName": "Teemo",
+          "damageDealt": 31054,
+          "isPlayer": false
+        },
+        {
+          "championName": "Viego",
+          "damageDealt": 28457,
+          "isPlayer": false
+        },
+        {
+          "championName": "Yone",
+          "damageDealt": 24168,
+          "isPlayer": false
+        },
+        {
+          "championName": "Milio",
+          "damageDealt": 7683,
+          "isPlayer": false
+        }
+      ],
+      "tier": "",
+      "rank": "",
+      "leaguePoints": 0,
+      "lpChange": 0,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3244179620",
+      "timestamp": 1779502754683,
+      "championName": "Khazix",
+      "kills": 0,
+      "deaths": 0,
+      "assists": 0,
+      "win": true,
+      "damage": 0,
+      "matchMaxDamage": 821,
+      "gameDuration": 129,
+      "gameMode": "CLASSIC",
+      "team": [
+        {
+          "championName": "Yasuo",
+          "damageDealt": 821,
+          "isPlayer": false
+        },
+        {
+          "championName": "Vladimir",
+          "damageDealt": 488,
+          "isPlayer": false
+        },
+        {
+          "championName": "Lulu",
+          "damageDealt": 331,
+          "isPlayer": false
+        },
+        {
+          "championName": "Smolder",
+          "damageDealt": 248,
+          "isPlayer": false
+        },
+        {
+          "championName": "Khazix",
+          "damageDealt": 0,
+          "isPlayer": true
+        }
+      ],
+      "tier": "",
+      "rank": "",
+      "leaguePoints": 0,
+      "lpChange": 0,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3244183764",
+      "timestamp": 1779503298263,
+      "championName": "Varus",
+      "kills": 10,
+      "deaths": 5,
+      "assists": 6,
+      "win": false,
+      "damage": 34059,
+      "matchMaxDamage": 34635,
+      "gameDuration": 1844,
+      "gameMode": "CLASSIC",
+      "team": [
+        {
+          "championName": "Varus",
+          "damageDealt": 34059,
+          "isPlayer": true
+        },
+        {
+          "championName": "Jax",
+          "damageDealt": 32248,
+          "isPlayer": false
+        },
+        {
+          "championName": "Quinn",
+          "damageDealt": 19252,
+          "isPlayer": false
+        },
+        {
+          "championName": "Lux",
+          "damageDealt": 14319,
+          "isPlayer": false
+        },
+        {
+          "championName": "Lulu",
+          "damageDealt": 5688,
+          "isPlayer": false
+        }
+      ],
+      "tier": "",
+      "rank": "",
+      "leaguePoints": 0,
+      "lpChange": 0,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3244204145",
+      "timestamp": 1779505614258,
+      "championName": "Ezreal",
+      "kills": 10,
+      "deaths": 8,
+      "assists": 5,
+      "win": false,
+      "damage": 30691,
+      "matchMaxDamage": 44522,
+      "gameDuration": 1753,
+      "gameMode": "CLASSIC",
+      "team": [
+        {
+          "championName": "Ezreal",
+          "damageDealt": 30691,
+          "isPlayer": true
+        },
+        {
+          "championName": "Kayn",
+          "damageDealt": 26870,
+          "isPlayer": false
+        },
+        {
+          "championName": "Fizz",
+          "damageDealt": 26542,
+          "isPlayer": false
+        },
+        {
+          "championName": "Lux",
+          "damageDealt": 18042,
+          "isPlayer": false
+        },
+        {
+          "championName": "Diana",
+          "damageDealt": 9280,
+          "isPlayer": false
+        }
+      ],
+      "tier": "",
+      "rank": "",
+      "leaguePoints": 0,
+      "lpChange": 0,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3244217659",
+      "timestamp": 1779507793949,
+      "championName": "Malphite",
+      "kills": 3,
+      "deaths": 4,
+      "assists": 4,
+      "win": false,
+      "damage": 12478,
+      "matchMaxDamage": 31880,
+      "gameDuration": 1610,
+      "gameMode": "CLASSIC",
+      "team": [
+        {
+          "championName": "Kled",
+          "damageDealt": 27103,
+          "isPlayer": false
+        },
+        {
+          "championName": "Jinx",
+          "damageDealt": 15259,
+          "isPlayer": false
+        },
+        {
+          "championName": "Malphite",
+          "damageDealt": 12478,
+          "isPlayer": true
+        },
+        {
+          "championName": "Yunara",
+          "damageDealt": 8582,
+          "isPlayer": false
+        },
+        {
+          "championName": "Leona",
+          "damageDealt": 5512,
+          "isPlayer": false
+        }
+      ],
+      "tier": "",
+      "rank": "",
+      "leaguePoints": 0,
+      "lpChange": 0,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3244227966",
+      "timestamp": 1779509699042,
+      "championName": "Varus",
+      "kills": 1,
+      "deaths": 9,
+      "assists": 5,
+      "win": false,
+      "damage": 16181,
+      "matchMaxDamage": 35434,
+      "gameDuration": 1875,
+      "gameMode": "CLASSIC",
+      "team": [
+        {
+          "championName": "Ahri",
+          "damageDealt": 25803,
+          "isPlayer": false
+        },
+        {
+          "championName": "Gangplank",
+          "damageDealt": 21719,
+          "isPlayer": false
+        },
+        {
+          "championName": "Varus",
+          "damageDealt": 16181,
+          "isPlayer": true
+        },
+        {
+          "championName": "Vi",
+          "damageDealt": 14363,
+          "isPlayer": false
+        },
+        {
+          "championName": "Seraphine",
+          "damageDealt": 12874,
+          "isPlayer": false
+        }
+      ],
+      "tier": "",
+      "rank": "",
+      "leaguePoints": 0,
+      "lpChange": 0,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3244245110",
+      "timestamp": 1779512261983,
+      "championName": "Smolder",
+      "kills": 9,
+      "deaths": 12,
+      "assists": 11,
+      "win": false,
+      "damage": 59836,
+      "matchMaxDamage": 59836,
+      "gameDuration": 1937,
+      "gameMode": "CLASSIC",
+      "team": [
+        {
+          "championName": "Smolder",
+          "damageDealt": 59836,
+          "isPlayer": true
+        },
+        {
+          "championName": "Mel",
+          "damageDealt": 38698,
+          "isPlayer": false
+        },
+        {
+          "championName": "Teemo",
+          "damageDealt": 37014,
+          "isPlayer": false
+        },
+        {
+          "championName": "Irelia",
+          "damageDealt": 30103,
+          "isPlayer": false
+        },
+        {
+          "championName": "Khazix",
+          "damageDealt": 21218,
+          "isPlayer": false
+        }
+      ],
+      "tier": "",
+      "rank": "",
+      "leaguePoints": 0,
+      "lpChange": 0,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3244257244",
+      "timestamp": 1779516131230,
+      "championName": "Varus",
+      "kills": 10,
+      "deaths": 7,
+      "assists": 3,
+      "win": false,
+      "damage": 14662,
+      "matchMaxDamage": 16522,
+      "gameDuration": 1096,
+      "gameMode": "CLASSIC",
+      "team": [
+        {
+          "championName": "Varus",
+          "damageDealt": 14662,
+          "isPlayer": true
+        },
+        {
+          "championName": "Nunu",
+          "damageDealt": 10122,
+          "isPlayer": false
+        },
+        {
+          "championName": "Smolder",
+          "damageDealt": 8699,
+          "isPlayer": false
+        },
+        {
+          "championName": "Rell",
+          "damageDealt": 4032,
+          "isPlayer": false
+        },
+        {
+          "championName": "Nasus",
+          "damageDealt": 86,
+          "isPlayer": false
+        }
+      ],
+      "tier": "",
+      "rank": "",
+      "leaguePoints": 0,
+      "lpChange": 0,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3244260575",
+      "timestamp": 1779517534730,
+      "championName": "Smolder",
+      "kills": 17,
+      "deaths": 6,
+      "assists": 5,
+      "win": true,
+      "damage": 37653,
+      "matchMaxDamage": 37653,
+      "gameDuration": 1729,
+      "gameMode": "CLASSIC",
+      "team": [
+        {
+          "championName": "Smolder",
+          "damageDealt": 37653,
+          "isPlayer": true
+        },
+        {
+          "championName": "Aatrox",
+          "damageDealt": 19722,
+          "isPlayer": false
+        },
+        {
+          "championName": "Leblanc",
+          "damageDealt": 17108,
+          "isPlayer": false
+        },
+        {
+          "championName": "Ashe",
+          "damageDealt": 12544,
+          "isPlayer": false
+        },
+        {
+          "championName": "Shyvana",
+          "damageDealt": 8666,
+          "isPlayer": false
+        }
+      ],
+      "tier": "",
+      "rank": "",
+      "leaguePoints": 0,
+      "lpChange": 0,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3244406173",
+      "timestamp": 1779563106913,
+      "championName": "Ezreal",
+      "kills": 5,
+      "deaths": 1,
+      "assists": 5,
+      "win": true,
+      "damage": 14891,
+      "matchMaxDamage": 14891,
+      "gameDuration": 1295,
+      "gameMode": "CLASSIC",
+      "team": [
+        {
+          "championName": "Ezreal",
+          "damageDealt": 14891,
+          "isPlayer": true
+        },
+        {
+          "championName": "Mordekaiser",
+          "damageDealt": 12085,
+          "isPlayer": false
+        },
+        {
+          "championName": "Vex",
+          "damageDealt": 10416,
+          "isPlayer": false
+        },
+        {
+          "championName": "LeeSin",
+          "damageDealt": 7063,
+          "isPlayer": false
+        },
+        {
+          "championName": "Seraphine",
+          "damageDealt": 6669,
+          "isPlayer": false
+        }
+      ],
+      "tier": "",
+      "rank": "",
+      "leaguePoints": 0,
+      "lpChange": 0,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3244419256",
+      "timestamp": 1779564792943,
+      "championName": "Lucian",
+      "kills": 6,
+      "deaths": 12,
+      "assists": 1,
+      "win": false,
+      "damage": 21385,
+      "matchMaxDamage": 36391,
+      "gameDuration": 1771,
+      "gameMode": "CLASSIC",
+      "team": [
+        {
+          "championName": "Khazix",
+          "damageDealt": 36391,
+          "isPlayer": false
+        },
+        {
+          "championName": "Zed",
+          "damageDealt": 22059,
+          "isPlayer": false
+        },
+        {
+          "championName": "Malphite",
+          "damageDealt": 22024,
+          "isPlayer": false
+        },
+        {
+          "championName": "Lucian",
+          "damageDealt": 21385,
+          "isPlayer": true
+        },
+        {
+          "championName": "Thresh",
+          "damageDealt": 10283,
+          "isPlayer": false
+        }
+      ],
+      "tier": "",
+      "rank": "",
+      "leaguePoints": 0,
+      "lpChange": 0,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3244588626",
+      "timestamp": 1779587128774,
+      "championName": "Smolder",
+      "kills": 6,
+      "deaths": 11,
+      "assists": 11,
+      "win": true,
+      "damage": 27797,
+      "matchMaxDamage": 36589,
+      "gameDuration": 1819,
+      "gameMode": "CLASSIC",
+      "team": [
+        {
+          "championName": "Diana",
+          "damageDealt": 36589,
+          "isPlayer": false
+        },
+        {
+          "championName": "Smolder",
+          "damageDealt": 27797,
+          "isPlayer": true
+        },
+        {
+          "championName": "Malphite",
+          "damageDealt": 27092,
+          "isPlayer": false
+        },
+        {
+          "championName": "Sylas",
+          "damageDealt": 21292,
+          "isPlayer": false
+        },
+        {
+          "championName": "Swain",
+          "damageDealt": 20859,
+          "isPlayer": false
+        }
+      ],
+      "tier": "",
+      "rank": "",
+      "leaguePoints": 0,
+      "lpChange": 0,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3244606631",
+      "timestamp": 1779589501476,
+      "championName": "Kaisa",
+      "kills": 17,
+      "deaths": 13,
+      "assists": 11,
+      "win": true,
+      "damage": 56816,
+      "matchMaxDamage": 84097,
+      "gameDuration": 1894,
+      "gameMode": "CLASSIC",
+      "team": [
+        {
+          "championName": "Kayn",
+          "damageDealt": 84097,
+          "isPlayer": false
+        },
+        {
+          "championName": "Kaisa",
+          "damageDealt": 56816,
+          "isPlayer": true
+        },
+        {
+          "championName": "Jax",
+          "damageDealt": 35647,
+          "isPlayer": false
+        },
+        {
+          "championName": "Vex",
+          "damageDealt": 34481,
+          "isPlayer": false
+        },
+        {
+          "championName": "Alistar",
+          "damageDealt": 17780,
+          "isPlayer": false
+        }
+      ],
+      "tier": "",
+      "rank": "",
+      "leaguePoints": 0,
+      "lpChange": 0,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3244631218",
+      "timestamp": 1779592464356,
+      "championName": "Ezreal",
+      "kills": 5,
+      "deaths": 2,
+      "assists": 5,
+      "win": true,
+      "damage": 39689,
+      "matchMaxDamage": 46045,
+      "gameDuration": 1970,
+      "gameMode": "CLASSIC",
+      "team": [
+        {
+          "championName": "Urgot",
+          "damageDealt": 46045,
+          "isPlayer": false
+        },
+        {
+          "championName": "Ezreal",
+          "damageDealt": 39689,
+          "isPlayer": true
+        },
+        {
+          "championName": "Malphite",
+          "damageDealt": 34862,
+          "isPlayer": false
+        },
+        {
+          "championName": "Yasuo",
+          "damageDealt": 24487,
+          "isPlayer": false
+        },
+        {
+          "championName": "Janna",
+          "damageDealt": 6799,
+          "isPlayer": false
+        }
+      ],
+      "tier": "",
+      "rank": "",
+      "leaguePoints": 0,
+      "lpChange": 0,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3244648229",
+      "timestamp": 1779594838587,
+      "championName": "Briar",
+      "kills": 14,
+      "deaths": 6,
+      "assists": 3,
+      "win": true,
+      "damage": 26471,
+      "matchMaxDamage": 34927,
+      "gameDuration": 1893,
+      "gameMode": "CLASSIC",
+      "team": [
+        {
+          "championName": "Teemo",
+          "damageDealt": 34927,
+          "isPlayer": false
+        },
+        {
+          "championName": "Caitlyn",
+          "damageDealt": 30102,
+          "isPlayer": false
+        },
+        {
+          "championName": "Briar",
+          "damageDealt": 26471,
+          "isPlayer": true
+        },
+        {
+          "championName": "Lux",
+          "damageDealt": 24751,
+          "isPlayer": false
+        },
+        {
+          "championName": "Ekko",
+          "damageDealt": 23861,
+          "isPlayer": false
+        }
+      ],
+      "tier": "",
+      "rank": "",
+      "leaguePoints": 0,
+      "lpChange": 0,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3244659525",
+      "timestamp": 1779597086882,
+      "championName": "Ezreal",
+      "kills": 4,
+      "deaths": 10,
+      "assists": 5,
+      "win": false,
+      "damage": 37314,
+      "matchMaxDamage": 43271,
+      "gameDuration": 2137,
+      "gameMode": "CLASSIC",
+      "team": [
+        {
+          "championName": "Diana",
+          "damageDealt": 43271,
+          "isPlayer": false
+        },
+        {
+          "championName": "Ezreal",
+          "damageDealt": 37314,
+          "isPlayer": true
+        },
+        {
+          "championName": "Illaoi",
+          "damageDealt": 24761,
+          "isPlayer": false
+        },
+        {
+          "championName": "Nocturne",
+          "damageDealt": 21399,
+          "isPlayer": false
+        },
+        {
+          "championName": "Seraphine",
+          "damageDealt": 8324,
+          "isPlayer": false
+        }
+      ],
+      "tier": "",
+      "rank": "",
+      "leaguePoints": 0,
+      "lpChange": 0,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3244929769",
+      "timestamp": 1779660472795,
+      "championName": "Caitlyn",
+      "kills": 5,
+      "deaths": 15,
+      "assists": 6,
+      "win": false,
+      "damage": 24334,
+      "matchMaxDamage": 47169,
+      "gameDuration": 2133,
+      "gameMode": "CLASSIC",
+      "team": [
+        {
+          "championName": "Veigar",
+          "damageDealt": 47169,
+          "isPlayer": false
+        },
+        {
+          "championName": "LeeSin",
+          "damageDealt": 32190,
+          "isPlayer": false
+        },
+        {
+          "championName": "Darius",
+          "damageDealt": 28403,
+          "isPlayer": false
+        },
+        {
+          "championName": "Caitlyn",
+          "damageDealt": 24334,
+          "isPlayer": true
+        },
+        {
+          "championName": "Milio",
+          "damageDealt": 5413,
+          "isPlayer": false
+        }
+      ],
+      "tier": "",
+      "rank": "",
+      "leaguePoints": 0,
+      "lpChange": -21,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3244979842",
+      "timestamp": 1779665943513,
+      "championName": "Malphite",
+      "kills": 4,
+      "deaths": 9,
+      "assists": 5,
+      "win": false,
+      "damage": 14688,
+      "matchMaxDamage": 41026,
+      "gameDuration": 1813,
+      "gameMode": "CLASSIC",
+      "team": [
+        {
+          "championName": "Akali",
+          "damageDealt": 23398,
+          "isPlayer": false
+        },
+        {
+          "championName": "Varus",
+          "damageDealt": 17906,
+          "isPlayer": false
+        },
+        {
+          "championName": "Lux",
+          "damageDealt": 15114,
+          "isPlayer": false
+        },
+        {
+          "championName": "Quinn",
+          "damageDealt": 15058,
+          "isPlayer": false
+        },
+        {
+          "championName": "Malphite",
+          "damageDealt": 14688,
+          "isPlayer": true
+        }
+      ],
+      "tier": "",
+      "rank": "",
+      "leaguePoints": 0,
+      "lpChange": -27,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3245001072",
+      "timestamp": 1779668100889,
+      "championName": "Teemo",
+      "kills": 1,
+      "deaths": 9,
+      "assists": 4,
+      "win": false,
+      "damage": 15617,
+      "matchMaxDamage": 29464,
+      "gameDuration": 1770,
+      "gameMode": "CLASSIC",
+      "team": [
+        {
+          "championName": "Hwei",
+          "damageDealt": 29464,
+          "isPlayer": false
+        },
+        {
+          "championName": "Jhin",
+          "damageDealt": 19770,
+          "isPlayer": false
+        },
+        {
+          "championName": "Camille",
+          "damageDealt": 16868,
+          "isPlayer": false
+        },
+        {
+          "championName": "Teemo",
+          "damageDealt": 15617,
+          "isPlayer": true
+        },
+        {
+          "championName": "Pyke",
+          "damageDealt": 10517,
+          "isPlayer": false
+        }
+      ],
+      "tier": "",
+      "rank": "",
+      "leaguePoints": 0,
+      "lpChange": -22,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3245019836",
+      "timestamp": 1779670227488,
+      "championName": "Briar",
+      "kills": 10,
+      "deaths": 5,
+      "assists": 5,
+      "win": true,
+      "damage": 12604,
+      "matchMaxDamage": 29419,
+      "gameDuration": 1411,
+      "gameMode": "CLASSIC",
+      "team": [
+        {
+          "championName": "Mordekaiser",
+          "damageDealt": 29419,
+          "isPlayer": false
+        },
+        {
+          "championName": "Seraphine",
+          "damageDealt": 14971,
+          "isPlayer": false
+        },
+        {
+          "championName": "Ashe",
+          "damageDealt": 14386,
+          "isPlayer": false
+        },
+        {
+          "championName": "Galio",
+          "damageDealt": 13175,
+          "isPlayer": false
+        },
+        {
+          "championName": "Briar",
+          "damageDealt": 12604,
+          "isPlayer": true
+        }
+      ],
+      "tier": "",
+      "rank": "",
+      "leaguePoints": 0,
+      "lpChange": 18,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3245041161",
+      "timestamp": 1779672540315,
+      "championName": "Graves",
+      "kills": 1,
+      "deaths": 5,
+      "assists": 0,
+      "win": false,
+      "damage": 4644,
+      "matchMaxDamage": 12039,
+      "gameDuration": 1182,
+      "gameMode": "CLASSIC",
+      "team": [
+        {
+          "championName": "Akshan",
+          "damageDealt": 8158,
+          "isPlayer": false
+        },
+        {
+          "championName": "Seraphine",
+          "damageDealt": 7849,
+          "isPlayer": false
+        },
+        {
+          "championName": "TahmKench",
+          "damageDealt": 7041,
+          "isPlayer": false
+        },
+        {
+          "championName": "Tristana",
+          "damageDealt": 6818,
+          "isPlayer": false
+        },
+        {
+          "championName": "Graves",
+          "damageDealt": 4644,
+          "isPlayer": true
+        }
+      ],
+      "tier": "",
+      "rank": "",
+      "leaguePoints": 0,
+      "lpChange": -22,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3245060316",
+      "timestamp": 1779674826951,
+      "championName": "Briar",
+      "kills": 11,
+      "deaths": 4,
+      "assists": 6,
+      "win": true,
+      "damage": 26139,
+      "matchMaxDamage": 28680,
+      "gameDuration": 1637,
+      "gameMode": "CLASSIC",
+      "team": [
+        {
+          "championName": "Garen",
+          "damageDealt": 28680,
+          "isPlayer": false
+        },
+        {
+          "championName": "Briar",
+          "damageDealt": 26139,
+          "isPlayer": true
+        },
+        {
+          "championName": "Caitlyn",
+          "damageDealt": 18372,
+          "isPlayer": false
+        },
+        {
+          "championName": "Akali",
+          "damageDealt": 9329,
+          "isPlayer": false
+        },
+        {
+          "championName": "Karma",
+          "damageDealt": 7650,
+          "isPlayer": false
+        }
+      ],
+      "tier": "",
+      "rank": "",
+      "leaguePoints": 0,
+      "lpChange": 33,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3245073183",
+      "timestamp": 1779676796111,
+      "championName": "Briar",
+      "kills": 15,
+      "deaths": 9,
+      "assists": 8,
+      "win": true,
+      "damage": 34722,
+      "matchMaxDamage": 38109,
+      "gameDuration": 2133,
+      "gameMode": "CLASSIC",
+      "team": [
+        {
+          "championName": "Kayle",
+          "damageDealt": 38109,
+          "isPlayer": false
+        },
+        {
+          "championName": "Briar",
+          "damageDealt": 34722,
+          "isPlayer": true
+        },
+        {
+          "championName": "Lux",
+          "damageDealt": 24755,
+          "isPlayer": false
+        },
+        {
+          "championName": "Azir",
+          "damageDealt": 22850,
+          "isPlayer": false
+        },
+        {
+          "championName": "Varus",
+          "damageDealt": 21220,
+          "isPlayer": false
+        }
+      ],
+      "tier": "",
+      "rank": "",
+      "leaguePoints": 0,
+      "lpChange": 0,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3245129776",
+      "timestamp": 1779712020013,
+      "championName": "Briar",
+      "kills": 1,
+      "deaths": 13,
+      "assists": 7,
+      "win": true,
+      "damage": 24802,
+      "matchMaxDamage": 81567,
+      "gameDuration": 2470,
+      "gameMode": "CLASSIC",
+      "team": [
+        {
+          "championName": "Samira",
+          "damageDealt": 81567,
+          "isPlayer": false
+        },
+        {
+          "championName": "Akali",
+          "damageDealt": 53808,
+          "isPlayer": false
+        },
+        {
+          "championName": "KogMaw",
+          "damageDealt": 45481,
+          "isPlayer": false
+        },
+        {
+          "championName": "Mel",
+          "damageDealt": 31366,
+          "isPlayer": false
+        },
+        {
+          "championName": "Briar",
+          "damageDealt": 24802,
+          "isPlayer": true
+        }
+      ],
+      "tier": "",
+      "rank": "",
+      "leaguePoints": 0,
+      "lpChange": 0,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3245138128",
+      "timestamp": 1779715074639,
+      "championName": "Elise",
+      "kills": 3,
+      "deaths": 8,
+      "assists": 8,
+      "win": false,
+      "damage": 18057,
+      "matchMaxDamage": 36405,
+      "gameDuration": 1829,
+      "gameMode": "CLASSIC",
+      "team": [
+        {
+          "championName": "Yasuo",
+          "damageDealt": 32193,
+          "isPlayer": false
+        },
+        {
+          "championName": "Gangplank",
+          "damageDealt": 31499,
+          "isPlayer": false
+        },
+        {
+          "championName": "Lissandra",
+          "damageDealt": 30669,
+          "isPlayer": false
+        },
+        {
+          "championName": "TahmKench",
+          "damageDealt": 21874,
+          "isPlayer": false
+        },
+        {
+          "championName": "Elise",
+          "damageDealt": 18057,
+          "isPlayer": true
+        }
+      ],
+      "tier": "",
+      "rank": "",
+      "leaguePoints": 0,
+      "lpChange": 0,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3245142328",
+      "timestamp": 1779717181282,
+      "championName": "Briar",
+      "kills": 3,
+      "deaths": 1,
+      "assists": 4,
+      "win": true,
+      "damage": 11474,
+      "matchMaxDamage": 48751,
+      "gameDuration": 1606,
+      "gameMode": "CLASSIC",
+      "team": [
+        {
+          "championName": "Riven",
+          "damageDealt": 48751,
+          "isPlayer": false
+        },
+        {
+          "championName": "Vladimir",
+          "damageDealt": 13782,
+          "isPlayer": false
+        },
+        {
+          "championName": "Briar",
+          "damageDealt": 11474,
+          "isPlayer": true
+        },
+        {
+          "championName": "Kaisa",
+          "damageDealt": 10086,
+          "isPlayer": false
+        },
+        {
+          "championName": "Nami",
+          "damageDealt": 3032,
+          "isPlayer": false
+        }
+      ],
+      "tier": "",
+      "rank": "",
+      "leaguePoints": 0,
+      "lpChange": 0,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3245171404",
+      "timestamp": 1779726842432,
+      "championName": "Briar",
+      "kills": 8,
+      "deaths": 8,
+      "assists": 3,
+      "win": false,
+      "damage": 15525,
+      "matchMaxDamage": 37522,
+      "gameDuration": 1614,
+      "gameMode": "CLASSIC",
+      "team": [
+        {
+          "championName": "Brand",
+          "damageDealt": 22560,
+          "isPlayer": false
+        },
+        {
+          "championName": "Diana",
+          "damageDealt": 20667,
+          "isPlayer": false
+        },
+        {
+          "championName": "Annie",
+          "damageDealt": 17829,
+          "isPlayer": false
+        },
+        {
+          "championName": "Briar",
+          "damageDealt": 15525,
+          "isPlayer": true
+        },
+        {
+          "championName": "Yorick",
+          "damageDealt": 12140,
+          "isPlayer": false
+        }
+      ],
+      "tier": "",
+      "rank": "",
+      "leaguePoints": 0,
+      "lpChange": 0,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3245254159",
+      "timestamp": 1779745207473,
+      "championName": "Briar",
+      "kills": 16,
+      "deaths": 2,
+      "assists": 1,
+      "win": true,
+      "damage": 18276,
+      "matchMaxDamage": 18276,
+      "gameDuration": 1235,
+      "gameMode": "CLASSIC",
+      "team": [
+        {
+          "championName": "Briar",
+          "damageDealt": 18276,
+          "isPlayer": true
+        },
+        {
+          "championName": "Mel",
+          "damageDealt": 14625,
+          "isPlayer": false
+        },
+        {
+          "championName": "Tristana",
+          "damageDealt": 12612,
+          "isPlayer": false
+        },
+        {
+          "championName": "MasterYi",
+          "damageDealt": 11678,
+          "isPlayer": false
+        },
+        {
+          "championName": "Fizz",
+          "damageDealt": 9931,
+          "isPlayer": false
+        }
+      ],
+      "tier": "GOLD",
+      "rank": "II",
+      "leaguePoints": 56,
+      "lpChange": 19,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3245292631",
+      "timestamp": 1779750844237,
+      "championName": "Briar",
+      "kills": 5,
+      "deaths": 9,
+      "assists": 6,
+      "win": false,
+      "damage": 23933,
+      "matchMaxDamage": 40411,
+      "gameDuration": 1760,
+      "gameMode": "CLASSIC",
+      "team": [
+        {
+          "championName": "Mordekaiser",
+          "damageDealt": 37294,
+          "isPlayer": false
+        },
+        {
+          "championName": "Briar",
+          "damageDealt": 23933,
+          "isPlayer": true
+        },
+        {
+          "championName": "Vladimir",
+          "damageDealt": 21987,
+          "isPlayer": false
+        },
+        {
+          "championName": "Twitch",
+          "damageDealt": 20354,
+          "isPlayer": false
+        },
+        {
+          "championName": "Nami",
+          "damageDealt": 8241,
+          "isPlayer": false
+        }
+      ],
+      "tier": "GOLD",
+      "rank": "II",
+      "leaguePoints": 56,
+      "lpChange": 0,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3245315872",
+      "timestamp": 1779753786979,
+      "championName": "Amumu",
+      "kills": 7,
+      "deaths": 11,
+      "assists": 11,
+      "win": false,
+      "damage": 41462,
+      "matchMaxDamage": 45766,
+      "gameDuration": 2154,
+      "gameMode": "CLASSIC",
+      "team": [
+        {
+          "championName": "Ezreal",
+          "damageDealt": 41535,
+          "isPlayer": false
+        },
+        {
+          "championName": "Amumu",
+          "damageDealt": 41462,
+          "isPlayer": true
+        },
+        {
+          "championName": "Fiora",
+          "damageDealt": 28442,
+          "isPlayer": false
+        },
+        {
+          "championName": "Yasuo",
+          "damageDealt": 16622,
+          "isPlayer": false
+        },
+        {
+          "championName": "Milio",
+          "damageDealt": 7894,
+          "isPlayer": false
+        }
+      ],
+      "tier": "GOLD",
+      "rank": "II",
+      "leaguePoints": 34,
+      "lpChange": -22,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3245337722",
+      "timestamp": 1779756402292,
+      "championName": "Briar",
+      "kills": 10,
+      "deaths": 5,
+      "assists": 6,
+      "win": true,
+      "damage": 23382,
+      "matchMaxDamage": 25840,
+      "gameDuration": 1565,
+      "gameMode": "CLASSIC",
+      "team": [
+        {
+          "championName": "Chogath",
+          "damageDealt": 25446,
+          "isPlayer": false
+        },
+        {
+          "championName": "Briar",
+          "damageDealt": 23382,
+          "isPlayer": true
+        },
+        {
+          "championName": "Caitlyn",
+          "damageDealt": 22889,
+          "isPlayer": false
+        },
+        {
+          "championName": "Irelia",
+          "damageDealt": 15616,
+          "isPlayer": false
+        },
+        {
+          "championName": "Lulu",
+          "damageDealt": 6090,
+          "isPlayer": false
+        }
+      ],
+      "tier": "GOLD",
+      "rank": "II",
+      "leaguePoints": 52,
+      "lpChange": 18,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3245359277",
+      "timestamp": 1779758617626,
+      "championName": "Briar",
+      "kills": 18,
+      "deaths": 15,
+      "assists": 9,
+      "win": true,
+      "damage": 44824,
+      "matchMaxDamage": 54138,
+      "gameDuration": 2249,
+      "gameMode": "CLASSIC",
+      "team": [
+        {
+          "championName": "AurelionSol",
+          "damageDealt": 47552,
+          "isPlayer": false
+        },
+        {
+          "championName": "Garen",
+          "damageDealt": 46710,
+          "isPlayer": false
+        },
+        {
+          "championName": "Briar",
+          "damageDealt": 44824,
+          "isPlayer": true
+        },
+        {
+          "championName": "MissFortune",
+          "damageDealt": 43881,
+          "isPlayer": false
+        },
+        {
+          "championName": "Shaco",
+          "damageDealt": 37642,
+          "isPlayer": false
+        }
+      ],
+      "tier": "GOLD",
+      "rank": "II",
+      "leaguePoints": 71,
+      "lpChange": 19,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3245778254",
+      "timestamp": 1779886148164,
+      "championName": "Briar",
+      "kills": 18,
+      "deaths": 10,
+      "assists": 23,
+      "win": true,
+      "damage": 66183,
+      "matchMaxDamage": 66183,
+      "gameDuration": 2668,
+      "gameMode": "CLASSIC",
+      "team": [
+        {
+          "championName": "Briar",
+          "damageDealt": 66183,
+          "isPlayer": true
+        },
+        {
+          "championName": "Kassadin",
+          "damageDealt": 59053,
+          "isPlayer": false
+        },
+        {
+          "championName": "Gangplank",
+          "damageDealt": 58230,
+          "isPlayer": false
+        },
+        {
+          "championName": "Thresh",
+          "damageDealt": 33095,
+          "isPlayer": false
+        },
+        {
+          "championName": "Smolder",
+          "damageDealt": 30093,
+          "isPlayer": false
+        }
+      ],
+      "tier": "GOLD",
+      "rank": "I",
+      "leaguePoints": 88,
+      "lpChange": 117,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3245823188",
+      "timestamp": 1779901418449,
+      "championName": "Briar",
+      "kills": 18,
+      "deaths": 3,
+      "assists": 8,
+      "win": true,
+      "damage": 32558,
+      "matchMaxDamage": 36720,
+      "gameDuration": 1834,
+      "gameMode": "CLASSIC",
+      "team": [
+        {
+          "championName": "Lux",
+          "damageDealt": 36720,
+          "isPlayer": false
+        },
+        {
+          "championName": "Briar",
+          "damageDealt": 32558,
+          "isPlayer": true
+        },
+        {
+          "championName": "DrMundo",
+          "damageDealt": 17384,
+          "isPlayer": false
+        },
+        {
+          "championName": "Neeko",
+          "damageDealt": 13916,
+          "isPlayer": false
+        },
+        {
+          "championName": "Xayah",
+          "damageDealt": 8603,
+          "isPlayer": false
+        }
+      ],
+      "tier": "GOLD",
+      "rank": "I",
+      "leaguePoints": 88,
+      "lpChange": 0,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3245901486",
+      "timestamp": 1779918590590,
+      "championName": "Briar",
+      "kills": 3,
+      "deaths": 1,
+      "assists": 2,
+      "win": true,
+      "damage": 6489,
+      "matchMaxDamage": 25570,
+      "gameDuration": 1226,
+      "gameMode": "CLASSIC",
+      "team": [
+        {
+          "championName": "Talon",
+          "damageDealt": 25570,
+          "isPlayer": false
+        },
+        {
+          "championName": "Kaisa",
+          "damageDealt": 10355,
+          "isPlayer": false
+        },
+        {
+          "championName": "Singed",
+          "damageDealt": 7071,
+          "isPlayer": false
+        },
+        {
+          "championName": "Briar",
+          "damageDealt": 6489,
+          "isPlayer": true
+        },
+        {
+          "championName": "Lulu",
+          "damageDealt": 2033,
+          "isPlayer": false
+        }
+      ],
+      "tier": "GOLD",
+      "rank": "I",
+      "leaguePoints": 88,
+      "lpChange": 0,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3245947983",
+      "timestamp": 1779925445822,
+      "championName": "Briar",
+      "kills": 13,
+      "deaths": 17,
+      "assists": 5,
+      "win": false,
+      "damage": 34047,
+      "matchMaxDamage": 44541,
+      "gameDuration": 2390,
+      "gameMode": "CLASSIC",
+      "team": [
+        {
+          "championName": "Briar",
+          "damageDealt": 34047,
+          "isPlayer": true
+        },
+        {
+          "championName": "Sivir",
+          "damageDealt": 30479,
+          "isPlayer": false
+        },
+        {
+          "championName": "Mordekaiser",
+          "damageDealt": 23307,
+          "isPlayer": false
+        },
+        {
+          "championName": "Mel",
+          "damageDealt": 22992,
+          "isPlayer": false
+        },
+        {
+          "championName": "Veigar",
+          "damageDealt": 15541,
+          "isPlayer": false
+        }
+      ],
+      "tier": "GOLD",
+      "rank": "I",
+      "leaguePoints": 88,
+      "lpChange": 0,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3245973818",
+      "timestamp": 1779928406963,
+      "championName": "Briar",
+      "kills": 17,
+      "deaths": 0,
+      "assists": 4,
+      "win": true,
+      "damage": 28270,
+      "matchMaxDamage": 28270,
+      "gameDuration": 1328,
+      "gameMode": "Solo/Duo",
+      "team": [
+        {
+          "championName": "Briar",
+          "damageDealt": 28270,
+          "isPlayer": true
+        },
+        {
+          "championName": "Galio",
+          "damageDealt": 10749,
+          "isPlayer": false
+        },
+        {
+          "championName": "Jinx",
+          "damageDealt": 10275,
+          "isPlayer": false
+        },
+        {
+          "championName": "TahmKench",
+          "damageDealt": 9149,
+          "isPlayer": false
+        },
+        {
+          "championName": "Leona",
+          "damageDealt": 7523,
+          "isPlayer": false
+        }
+      ],
+      "tier": "PLATINUM",
+      "rank": "IV",
+      "leaguePoints": 6,
+      "lpChange": 0,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3245988319",
+      "timestamp": 1779930047992,
+      "championName": "Briar",
+      "kills": 12,
+      "deaths": 6,
+      "assists": 5,
+      "win": true,
+      "damage": 28123,
+      "matchMaxDamage": 43775,
+      "gameDuration": 1542,
+      "gameMode": "Solo/Duo",
+      "team": [
+        {
+          "championName": "Varus",
+          "damageDealt": 43775,
+          "isPlayer": false
+        },
+        {
+          "championName": "Briar",
+          "damageDealt": 28123,
+          "isPlayer": true
+        },
+        {
+          "championName": "Xayah",
+          "damageDealt": 18826,
+          "isPlayer": false
+        },
+        {
+          "championName": "Orianna",
+          "damageDealt": 15681,
+          "isPlayer": false
+        },
+        {
+          "championName": "Morgana",
+          "damageDealt": 7714,
+          "isPlayer": false
+        }
+      ],
+      "tier": "PLATINUM",
+      "rank": "IV",
+      "leaguePoints": 6,
+      "lpChange": 0,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3246004244",
+      "timestamp": 1779931941296,
+      "championName": "Briar",
+      "kills": 0,
+      "deaths": 0,
+      "assists": 0,
+      "win": false,
+      "damage": 0,
+      "matchMaxDamage": 102,
+      "gameDuration": 68,
+      "gameMode": "Solo/Duo",
+      "team": [
+        {
+          "championName": "MissFortune",
+          "damageDealt": 102,
+          "isPlayer": false
+        },
+        {
+          "championName": "Garen",
+          "damageDealt": 66,
+          "isPlayer": false
+        },
+        {
+          "championName": "Milio",
+          "damageDealt": 1,
+          "isPlayer": false
+        },
+        {
+          "championName": "Briar",
+          "damageDealt": 0,
+          "isPlayer": true
+        },
+        {
+          "championName": "Fizz",
+          "damageDealt": 0,
+          "isPlayer": false
+        }
+      ],
+      "tier": "PLATINUM",
+      "rank": "IV",
+      "leaguePoints": 6,
+      "lpChange": 0,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3246007656",
+      "timestamp": 1779932543824,
+      "championName": "Briar",
+      "kills": 7,
+      "deaths": 7,
+      "assists": 12,
+      "win": true,
+      "damage": 29666,
+      "matchMaxDamage": 29666,
+      "gameDuration": 1810,
+      "gameMode": "Solo/Duo",
+      "team": [
+        {
+          "championName": "Briar",
+          "damageDealt": 29666,
+          "isPlayer": true
+        },
+        {
+          "championName": "Syndra",
+          "damageDealt": 28569,
+          "isPlayer": false
+        },
+        {
+          "championName": "Yorick",
+          "damageDealt": 21281,
+          "isPlayer": false
+        },
+        {
+          "championName": "Xayah",
+          "damageDealt": 15245,
+          "isPlayer": false
+        },
+        {
+          "championName": "Senna",
+          "damageDealt": 11273,
+          "isPlayer": false
+        }
+      ],
+      "tier": "PLATINUM",
+      "rank": "IV",
+      "leaguePoints": 6,
+      "lpChange": 0,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3246024322",
+      "timestamp": 1779934681041,
+      "championName": "Briar",
+      "kills": 10,
+      "deaths": 8,
+      "assists": 10,
+      "win": true,
+      "damage": 28290,
+      "matchMaxDamage": 40189,
+      "gameDuration": 2119,
+      "gameMode": "Solo/Duo",
+      "team": [
+        {
+          "championName": "Lucian",
+          "damageDealt": 40005,
+          "isPlayer": false
+        },
+        {
+          "championName": "Ambessa",
+          "damageDealt": 34848,
+          "isPlayer": false
+        },
+        {
+          "championName": "Briar",
+          "damageDealt": 28290,
+          "isPlayer": true
+        },
+        {
+          "championName": "Sylas",
+          "damageDealt": 26026,
+          "isPlayer": false
+        },
+        {
+          "championName": "Nami",
+          "damageDealt": 10788,
+          "isPlayer": false
+        }
+      ],
+      "tier": "PLATINUM",
+      "rank": "IV",
+      "leaguePoints": 6,
+      "lpChange": 0,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3246097842",
+      "timestamp": 1779973803898,
+      "championName": "Briar",
+      "kills": 10,
+      "deaths": 7,
+      "assists": 5,
+      "win": false,
+      "damage": 31388,
+      "matchMaxDamage": 43887,
+      "gameDuration": 2176,
+      "gameMode": "Solo/Duo",
+      "team": [
+        {
+          "championName": "Seraphine",
+          "damageDealt": 34959,
+          "isPlayer": false
+        },
+        {
+          "championName": "Akali",
+          "damageDealt": 34488,
+          "isPlayer": false
+        },
+        {
+          "championName": "Briar",
+          "damageDealt": 31388,
+          "isPlayer": true
+        },
+        {
+          "championName": "Mel",
+          "damageDealt": 20624,
+          "isPlayer": false
+        },
+        {
+          "championName": "Braum",
+          "damageDealt": 9938,
+          "isPlayer": false
+        }
+      ],
+      "tier": "PLATINUM",
+      "rank": "IV",
+      "leaguePoints": 6,
+      "lpChange": 0,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3246167291",
+      "timestamp": 1779993072132,
+      "championName": "Briar",
+      "kills": 23,
+      "deaths": 5,
+      "assists": 5,
+      "win": true,
+      "damage": 41843,
+      "matchMaxDamage": 42506,
+      "gameDuration": 2396,
+      "gameMode": "Solo/Duo",
+      "team": [
+        {
+          "championName": "Volibear",
+          "damageDealt": 42506,
+          "isPlayer": false
+        },
+        {
+          "championName": "Briar",
+          "damageDealt": 41843,
+          "isPlayer": true
+        },
+        {
+          "championName": "Brand",
+          "damageDealt": 36798,
+          "isPlayer": false
+        },
+        {
+          "championName": "Lux",
+          "damageDealt": 33152,
+          "isPlayer": false
+        },
+        {
+          "championName": "Fizz",
+          "damageDealt": 30399,
+          "isPlayer": false
+        }
+      ],
+      "tier": "PLATINUM",
+      "rank": "IV",
+      "leaguePoints": 6,
+      "lpChange": 0,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3246241490",
+      "timestamp": 1780007723821,
+      "championName": "Briar",
+      "kills": 11,
+      "deaths": 8,
+      "assists": 3,
+      "win": false,
+      "damage": 25532,
+      "matchMaxDamage": 38072,
+      "gameDuration": 1831,
+      "gameMode": "Solo/Duo",
+      "team": [
+        {
+          "championName": "Brand",
+          "damageDealt": 25988,
+          "isPlayer": false
+        },
+        {
+          "championName": "Briar",
+          "damageDealt": 25532,
+          "isPlayer": true
+        },
+        {
+          "championName": "Zoe",
+          "damageDealt": 25369,
+          "isPlayer": false
+        },
+        {
+          "championName": "Xayah",
+          "damageDealt": 23372,
+          "isPlayer": false
+        },
+        {
+          "championName": "Shyvana",
+          "damageDealt": 17361,
+          "isPlayer": false
+        }
+      ],
+      "tier": "PLATINUM",
+      "rank": "IV",
+      "leaguePoints": 6,
+      "lpChange": 0,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3246279030",
+      "timestamp": 1780012168755,
+      "championName": "Briar",
+      "kills": 11,
+      "deaths": 8,
+      "assists": 5,
+      "win": true,
+      "damage": 29744,
+      "matchMaxDamage": 32414,
+      "gameDuration": 1915,
+      "gameMode": "Solo/Duo",
+      "team": [
+        {
+          "championName": "Katarina",
+          "damageDealt": 30553,
+          "isPlayer": false
+        },
+        {
+          "championName": "Briar",
+          "damageDealt": 29744,
+          "isPlayer": true
+        },
+        {
+          "championName": "XinZhao",
+          "damageDealt": 25076,
+          "isPlayer": false
+        },
+        {
+          "championName": "Jinx",
+          "damageDealt": 12988,
+          "isPlayer": false
+        },
+        {
+          "championName": "Seraphine",
+          "damageDealt": 11713,
+          "isPlayer": false
+        }
+      ],
+      "tier": "PLATINUM",
+      "rank": "IV",
+      "leaguePoints": 6,
+      "lpChange": 0,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3246297350",
+      "timestamp": 1780014618205,
+      "championName": "Naafiri",
+      "kills": 13,
+      "deaths": 3,
+      "assists": 6,
+      "win": true,
+      "damage": 28258,
+      "matchMaxDamage": 28258,
+      "gameDuration": 1416,
+      "gameMode": "Solo/Duo",
+      "team": [
+        {
+          "championName": "Naafiri",
+          "damageDealt": 28258,
+          "isPlayer": true
+        },
+        {
+          "championName": "Gragas",
+          "damageDealt": 15609,
+          "isPlayer": false
+        },
+        {
+          "championName": "Jinx",
+          "damageDealt": 15475,
+          "isPlayer": false
+        },
+        {
+          "championName": "Pyke",
+          "damageDealt": 14403,
+          "isPlayer": false
+        },
+        {
+          "championName": "Elise",
+          "damageDealt": 8716,
+          "isPlayer": false
+        }
+      ],
+      "tier": "PLATINUM",
+      "rank": "IV",
+      "leaguePoints": 6,
+      "lpChange": 0,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3246314451",
+      "timestamp": 1780016568998,
+      "championName": "Briar",
+      "kills": 11,
+      "deaths": 12,
+      "assists": 6,
+      "win": false,
+      "damage": 36022,
+      "matchMaxDamage": 62958,
+      "gameDuration": 2308,
+      "gameMode": "Solo/Duo",
+      "team": [
+        {
+          "championName": "Ziggs",
+          "damageDealt": 62958,
+          "isPlayer": false
+        },
+        {
+          "championName": "Varus",
+          "damageDealt": 58392,
+          "isPlayer": false
+        },
+        {
+          "championName": "Illaoi",
+          "damageDealt": 48281,
+          "isPlayer": false
+        },
+        {
+          "championName": "Briar",
+          "damageDealt": 36022,
+          "isPlayer": true
+        },
+        {
+          "championName": "Soraka",
+          "damageDealt": 3525,
+          "isPlayer": false
+        }
+      ],
+      "tier": "PLATINUM",
+      "rank": "IV",
+      "leaguePoints": 6,
+      "lpChange": 0,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3246340118",
+      "timestamp": 1780019369295,
+      "championName": "Briar",
+      "kills": 0,
+      "deaths": 0,
+      "assists": 0,
+      "win": true,
+      "damage": 0,
+      "matchMaxDamage": 653,
+      "gameDuration": 68,
+      "gameMode": "Solo/Duo",
+      "team": [
+        {
+          "championName": "MasterYi",
+          "damageDealt": 583,
+          "isPlayer": false
+        },
+        {
+          "championName": "Sivir",
+          "damageDealt": 105,
+          "isPlayer": false
+        },
+        {
+          "championName": "Briar",
+          "damageDealt": 0,
+          "isPlayer": true
+        },
+        {
+          "championName": "Twitch",
+          "damageDealt": 0,
+          "isPlayer": false
+        },
+        {
+          "championName": "Seraphine",
+          "damageDealt": 0,
+          "isPlayer": false
+        }
+      ],
+      "tier": "PLATINUM",
+      "rank": "IV",
+      "leaguePoints": 6,
+      "lpChange": 0,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3246342764",
+      "timestamp": 1780020126661,
+      "championName": "Briar",
+      "kills": 4,
+      "deaths": 2,
+      "assists": 4,
+      "win": true,
+      "damage": 10944,
+      "matchMaxDamage": 10944,
+      "gameDuration": 936,
+      "gameMode": "Solo/Duo",
+      "team": [
+        {
+          "championName": "Briar",
+          "damageDealt": 10944,
+          "isPlayer": true
+        },
+        {
+          "championName": "Sett",
+          "damageDealt": 9576,
+          "isPlayer": false
+        },
+        {
+          "championName": "Twitch",
+          "damageDealt": 7966,
+          "isPlayer": false
+        },
+        {
+          "championName": "Zaahen",
+          "damageDealt": 6665,
+          "isPlayer": false
+        },
+        {
+          "championName": "Seraphine",
+          "damageDealt": 5444,
+          "isPlayer": false
+        }
+      ],
+      "tier": "PLATINUM",
+      "rank": "IV",
+      "leaguePoints": 6,
+      "lpChange": 0,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3246378287",
+      "timestamp": 1780025521138,
+      "championName": "Vayne",
+      "kills": 8,
+      "deaths": 7,
+      "assists": 7,
+      "win": true,
+      "damage": 19194,
+      "matchMaxDamage": 44583,
+      "gameDuration": 1546,
+      "gameMode": "Solo/Duo",
+      "team": [
+        {
+          "championName": "Irelia",
+          "damageDealt": 44583,
+          "isPlayer": false
+        },
+        {
+          "championName": "Illaoi",
+          "damageDealt": 20333,
+          "isPlayer": false
+        },
+        {
+          "championName": "Brand",
+          "damageDealt": 19699,
+          "isPlayer": false
+        },
+        {
+          "championName": "Vayne",
+          "damageDealt": 19194,
+          "isPlayer": true
+        },
+        {
+          "championName": "Nocturne",
+          "damageDealt": 9849,
+          "isPlayer": false
+        }
+      ],
+      "tier": "PLATINUM",
+      "rank": "IV",
+      "leaguePoints": 6,
+      "lpChange": 0,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3246432619",
+      "timestamp": 1780061480036,
+      "championName": "Briar",
+      "kills": 4,
+      "deaths": 1,
+      "assists": 3,
+      "win": true,
+      "damage": 6824,
+      "matchMaxDamage": 11235,
+      "gameDuration": 918,
+      "gameMode": "Solo/Duo",
+      "team": [
+        {
+          "championName": "Chogath",
+          "damageDealt": 11235,
+          "isPlayer": false
+        },
+        {
+          "championName": "Fizz",
+          "damageDealt": 10558,
+          "isPlayer": false
+        },
+        {
+          "championName": "Velkoz",
+          "damageDealt": 7410,
+          "isPlayer": false
+        },
+        {
+          "championName": "Briar",
+          "damageDealt": 6824,
+          "isPlayer": true
+        },
+        {
+          "championName": "Tristana",
+          "damageDealt": 5388,
+          "isPlayer": false
+        }
+      ],
+      "tier": "PLATINUM",
+      "rank": "IV",
+      "leaguePoints": 6,
+      "lpChange": 0,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3246435863",
+      "timestamp": 1780063132177,
+      "championName": "Briar",
+      "kills": 17,
+      "deaths": 8,
+      "assists": 13,
+      "win": false,
+      "damage": 39713,
+      "matchMaxDamage": 59261,
+      "gameDuration": 2134,
+      "gameMode": "Solo/Duo",
+      "team": [
+        {
+          "championName": "Ezreal",
+          "damageDealt": 44704,
+          "isPlayer": false
+        },
+        {
+          "championName": "Briar",
+          "damageDealt": 39713,
+          "isPlayer": true
+        },
+        {
+          "championName": "Mordekaiser",
+          "damageDealt": 23700,
+          "isPlayer": false
+        },
+        {
+          "championName": "Neeko",
+          "damageDealt": 14814,
+          "isPlayer": false
+        },
+        {
+          "championName": "Yone",
+          "damageDealt": 14379,
+          "isPlayer": false
+        }
+      ],
+      "tier": "PLATINUM",
+      "rank": "IV",
+      "leaguePoints": 6,
+      "lpChange": 0,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3246529520",
+      "timestamp": 1780086506281,
+      "championName": "Briar",
+      "kills": 0,
+      "deaths": 0,
+      "assists": 0,
+      "win": false,
+      "damage": 0,
+      "matchMaxDamage": 2235,
+      "gameDuration": 272,
+      "gameMode": "Solo/Duo",
+      "team": [
+        {
+          "championName": "Yone",
+          "damageDealt": 1771,
+          "isPlayer": false
+        },
+        {
+          "championName": "Talon",
+          "damageDealt": 1361,
+          "isPlayer": false
+        },
+        {
+          "championName": "Soraka",
+          "damageDealt": 858,
+          "isPlayer": false
+        },
+        {
+          "championName": "Sivir",
+          "damageDealt": 770,
+          "isPlayer": false
+        },
+        {
+          "championName": "Briar",
+          "damageDealt": 0,
+          "isPlayer": true
+        }
+      ],
+      "tier": "PLATINUM",
+      "rank": "IV",
+      "leaguePoints": 6,
+      "lpChange": 0,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3246532718",
+      "timestamp": 1780087106430,
+      "championName": "Briar",
+      "kills": 14,
+      "deaths": 6,
+      "assists": 10,
+      "win": true,
+      "damage": 23351,
+      "matchMaxDamage": 33837,
+      "gameDuration": 1493,
+      "gameMode": "Solo/Duo",
+      "team": [
+        {
+          "championName": "Yasuo",
+          "damageDealt": 33837,
+          "isPlayer": false
+        },
+        {
+          "championName": "Samira",
+          "damageDealt": 27938,
+          "isPlayer": false
+        },
+        {
+          "championName": "Briar",
+          "damageDealt": 23351,
+          "isPlayer": true
+        },
+        {
+          "championName": "Gragas",
+          "damageDealt": 12372,
+          "isPlayer": false
+        },
+        {
+          "championName": "Rell",
+          "damageDealt": 10023,
+          "isPlayer": false
+        }
+      ],
+      "tier": "PLATINUM",
+      "rank": "IV",
+      "leaguePoints": 6,
+      "lpChange": 0,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3246577624",
+      "timestamp": 1780094688157,
+      "championName": "Briar",
+      "kills": 4,
+      "deaths": 14,
+      "assists": 14,
+      "win": true,
+      "damage": 33583,
+      "matchMaxDamage": 92334,
+      "gameDuration": 3256,
+      "gameMode": "Solo/Duo",
+      "team": [
+        {
+          "championName": "AurelionSol",
+          "damageDealt": 92334,
+          "isPlayer": false
+        },
+        {
+          "championName": "Vladimir",
+          "damageDealt": 60854,
+          "isPlayer": false
+        },
+        {
+          "championName": "Brand",
+          "damageDealt": 51675,
+          "isPlayer": false
+        },
+        {
+          "championName": "Briar",
+          "damageDealt": 33583,
+          "isPlayer": true
+        },
+        {
+          "championName": "Ziggs",
+          "damageDealt": 17868,
+          "isPlayer": false
+        }
+      ],
+      "tier": "PLATINUM",
+      "rank": "IV",
+      "leaguePoints": 24,
+      "lpChange": 18,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3246609879",
+      "timestamp": 1780099154957,
+      "championName": "LeeSin",
+      "kills": 4,
+      "deaths": 10,
+      "assists": 13,
+      "win": true,
+      "damage": 18168,
+      "matchMaxDamage": 51594,
+      "gameDuration": 2220,
+      "gameMode": "Solo/Duo",
+      "team": [
+        {
+          "championName": "Vladimir",
+          "damageDealt": 51594,
+          "isPlayer": false
+        },
+        {
+          "championName": "Darius",
+          "damageDealt": 30962,
+          "isPlayer": false
+        },
+        {
+          "championName": "Jhin",
+          "damageDealt": 28477,
+          "isPlayer": false
+        },
+        {
+          "championName": "Senna",
+          "damageDealt": 24103,
+          "isPlayer": false
+        },
+        {
+          "championName": "LeeSin",
+          "damageDealt": 18168,
+          "isPlayer": true
+        }
+      ],
+      "tier": "PLATINUM",
+      "rank": "IV",
+      "leaguePoints": 43,
+      "lpChange": 19,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3246632380",
+      "timestamp": 1780101685091,
+      "championName": "Briar",
+      "kills": 14,
+      "deaths": 10,
+      "assists": 7,
+      "win": true,
+      "damage": 45202,
+      "matchMaxDamage": 46038,
+      "gameDuration": 2143,
+      "gameMode": "Solo/Duo",
+      "team": [
+        {
+          "championName": "Briar",
+          "damageDealt": 45202,
+          "isPlayer": true
+        },
+        {
+          "championName": "Annie",
+          "damageDealt": 39651,
+          "isPlayer": false
+        },
+        {
+          "championName": "Brand",
+          "damageDealt": 39503,
+          "isPlayer": false
+        },
+        {
+          "championName": "Garen",
+          "damageDealt": 31361,
+          "isPlayer": false
+        },
+        {
+          "championName": "Thresh",
+          "damageDealt": 16741,
+          "isPlayer": false
+        }
+      ],
+      "tier": "PLATINUM",
+      "rank": "IV",
+      "leaguePoints": 62,
+      "lpChange": 19,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3246654823",
+      "timestamp": 1780104404194,
+      "championName": "Briar",
+      "kills": 17,
+      "deaths": 10,
+      "assists": 11,
+      "win": true,
+      "damage": 46297,
+      "matchMaxDamage": 64679,
+      "gameDuration": 2160,
+      "gameMode": "Solo/Duo",
+      "team": [
+        {
+          "championName": "Heimerdinger",
+          "damageDealt": 64679,
+          "isPlayer": false
+        },
+        {
+          "championName": "Briar",
+          "damageDealt": 46297,
+          "isPlayer": true
+        },
+        {
+          "championName": "Aphelios",
+          "damageDealt": 42185,
+          "isPlayer": false
+        },
+        {
+          "championName": "Vayne",
+          "damageDealt": 28516,
+          "isPlayer": false
+        },
+        {
+          "championName": "Nautilus",
+          "damageDealt": 13886,
+          "isPlayer": false
+        }
+      ],
+      "tier": "PLATINUM",
+      "rank": "IV",
+      "leaguePoints": 82,
+      "lpChange": 20,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3246821310",
+      "timestamp": 1780154517822,
+      "championName": "Vi",
+      "kills": 7,
+      "deaths": 7,
+      "assists": 2,
+      "win": false,
+      "damage": 9074,
+      "matchMaxDamage": 32360,
+      "gameDuration": 1536,
+      "gameMode": "Solo/Duo",
+      "team": [
+        {
+          "championName": "Fiora",
+          "damageDealt": 20406,
+          "isPlayer": false
+        },
+        {
+          "championName": "Samira",
+          "damageDealt": 16850,
+          "isPlayer": false
+        },
+        {
+          "championName": "Ahri",
+          "damageDealt": 15246,
+          "isPlayer": false
+        },
+        {
+          "championName": "Fizz",
+          "damageDealt": 12736,
+          "isPlayer": false
+        },
+        {
+          "championName": "Vi",
+          "damageDealt": 9074,
+          "isPlayer": true
+        }
+      ],
+      "tier": "PLATINUM",
+      "rank": "IV",
+      "leaguePoints": 62,
+      "lpChange": -20,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3246828746",
+      "timestamp": 1780156500647,
+      "championName": "Briar",
+      "kills": 2,
+      "deaths": 7,
+      "assists": 5,
+      "win": false,
+      "damage": 9820,
+      "matchMaxDamage": 17796,
+      "gameDuration": 1282,
+      "gameMode": "Solo/Duo",
+      "team": [
+        {
+          "championName": "Qiyana",
+          "damageDealt": 16923,
+          "isPlayer": false
+        },
+        {
+          "championName": "Malzahar",
+          "damageDealt": 15303,
+          "isPlayer": false
+        },
+        {
+          "championName": "Riven",
+          "damageDealt": 15129,
+          "isPlayer": false
+        },
+        {
+          "championName": "Volibear",
+          "damageDealt": 10723,
+          "isPlayer": false
+        },
+        {
+          "championName": "Briar",
+          "damageDealt": 9820,
+          "isPlayer": true
+        }
+      ],
+      "tier": "PLATINUM",
+      "rank": "IV",
+      "leaguePoints": 41,
+      "lpChange": -21,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3246835878",
+      "timestamp": 1780158273618,
+      "championName": "Briar",
+      "kills": 17,
+      "deaths": 4,
+      "assists": 6,
+      "win": true,
+      "damage": 27319,
+      "matchMaxDamage": 27319,
+      "gameDuration": 1485,
+      "gameMode": "Solo/Duo",
+      "team": [
+        {
+          "championName": "Briar",
+          "damageDealt": 27319,
+          "isPlayer": true
+        },
+        {
+          "championName": "Mordekaiser",
+          "damageDealt": 25213,
+          "isPlayer": false
+        },
+        {
+          "championName": "Malzahar",
+          "damageDealt": 24779,
+          "isPlayer": false
+        },
+        {
+          "championName": "Seraphine",
+          "damageDealt": 16872,
+          "isPlayer": false
+        },
+        {
+          "championName": "Jhin",
+          "damageDealt": 12275,
+          "isPlayer": false
+        }
+      ],
+      "tier": "PLATINUM",
+      "rank": "IV",
+      "leaguePoints": 60,
+      "lpChange": 19,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3246916848",
+      "timestamp": 1780172077550,
+      "championName": "LeeSin",
+      "kills": 6,
+      "deaths": 6,
+      "assists": 5,
+      "win": false,
+      "damage": 17005,
+      "matchMaxDamage": 39885,
+      "gameDuration": 1997,
+      "gameMode": "Solo/Duo",
+      "team": [
+        {
+          "championName": "Tryndamere",
+          "damageDealt": 29377,
+          "isPlayer": false
+        },
+        {
+          "championName": "TwistedFate",
+          "damageDealt": 28211,
+          "isPlayer": false
+        },
+        {
+          "championName": "Leona",
+          "damageDealt": 19693,
+          "isPlayer": false
+        },
+        {
+          "championName": "Tristana",
+          "damageDealt": 17565,
+          "isPlayer": false
+        },
+        {
+          "championName": "LeeSin",
+          "damageDealt": 17005,
+          "isPlayer": true
+        }
+      ],
+      "tier": "PLATINUM",
+      "rank": "IV",
+      "leaguePoints": 39,
+      "lpChange": -21,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3246934707",
+      "timestamp": 1780174574152,
+      "championName": "Briar",
+      "kills": 6,
+      "deaths": 3,
+      "assists": 12,
+      "win": true,
+      "damage": 14909,
+      "matchMaxDamage": 32454,
+      "gameDuration": 1472,
+      "gameMode": "Solo/Duo",
+      "team": [
+        {
+          "championName": "Lucian",
+          "damageDealt": 32454,
+          "isPlayer": false
+        },
+        {
+          "championName": "Morgana",
+          "damageDealt": 24599,
+          "isPlayer": false
+        },
+        {
+          "championName": "Akali",
+          "damageDealt": 20238,
+          "isPlayer": false
+        },
+        {
+          "championName": "Irelia",
+          "damageDealt": 17624,
+          "isPlayer": false
+        },
+        {
+          "championName": "Briar",
+          "damageDealt": 14909,
+          "isPlayer": true
+        }
+      ],
+      "tier": "PLATINUM",
+      "rank": "IV",
+      "leaguePoints": 58,
+      "lpChange": 19,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3246948925",
+      "timestamp": 1780176656133,
+      "championName": "Khazix",
+      "kills": 6,
+      "deaths": 10,
+      "assists": 5,
+      "win": false,
+      "damage": 17831,
+      "matchMaxDamage": 37910,
+      "gameDuration": 1613,
+      "gameMode": "Flex",
+      "team": [
+        {
+          "championName": "Khazix",
+          "damageDealt": 17831,
+          "isPlayer": true
+        },
+        {
+          "championName": "Yone",
+          "damageDealt": 16233,
+          "isPlayer": false
+        },
+        {
+          "championName": "MissFortune",
+          "damageDealt": 11517,
+          "isPlayer": false
+        },
+        {
+          "championName": "Karma",
+          "damageDealt": 11480,
+          "isPlayer": false
+        },
+        {
+          "championName": "Vladimir",
+          "damageDealt": 9289,
+          "isPlayer": false
+        }
+      ],
+      "tier": "PLATINUM",
+      "rank": "IV",
+      "leaguePoints": 58,
+      "lpChange": 0,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3246990358",
+      "timestamp": 1780182159056,
+      "championName": "Briar",
+      "kills": 13,
+      "deaths": 12,
+      "assists": 14,
+      "win": true,
+      "damage": 46397,
+      "matchMaxDamage": 54413,
+      "gameDuration": 2281,
+      "gameMode": "Solo/Duo",
+      "team": [
+        {
+          "championName": "Gangplank",
+          "damageDealt": 54413,
+          "isPlayer": false
+        },
+        {
+          "championName": "Briar",
+          "damageDealt": 46397,
+          "isPlayer": true
+        },
+        {
+          "championName": "Twitch",
+          "damageDealt": 37942,
+          "isPlayer": false
+        },
+        {
+          "championName": "Viktor",
+          "damageDealt": 37261,
+          "isPlayer": false
+        },
+        {
+          "championName": "Seraphine",
+          "damageDealt": 8563,
+          "isPlayer": false
+        }
+      ],
+      "tier": "PLATINUM",
+      "rank": "IV",
+      "leaguePoints": 78,
+      "lpChange": 20,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3247010573",
+      "timestamp": 1780184902747,
+      "championName": "Amumu",
+      "kills": 6,
+      "deaths": 11,
+      "assists": 9,
+      "win": false,
+      "damage": 27647,
+      "matchMaxDamage": 68567,
+      "gameDuration": 2456,
+      "gameMode": "Solo/Duo",
+      "team": [
+        {
+          "championName": "Fizz",
+          "damageDealt": 44483,
+          "isPlayer": false
+        },
+        {
+          "championName": "Sion",
+          "damageDealt": 40484,
+          "isPlayer": false
+        },
+        {
+          "championName": "Ezreal",
+          "damageDealt": 38292,
+          "isPlayer": false
+        },
+        {
+          "championName": "Amumu",
+          "damageDealt": 27647,
+          "isPlayer": true
+        },
+        {
+          "championName": "Seraphine",
+          "damageDealt": 18405,
+          "isPlayer": false
+        }
+      ],
+      "tier": "PLATINUM",
+      "rank": "IV",
+      "leaguePoints": 58,
+      "lpChange": -20,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3247033611",
+      "timestamp": 1780187795018,
+      "championName": "Briar",
+      "kills": 1,
+      "deaths": 7,
+      "assists": 5,
+      "win": false,
+      "damage": 8858,
+      "matchMaxDamage": 22773,
+      "gameDuration": 1389,
+      "gameMode": "Solo/Duo",
+      "team": [
+        {
+          "championName": "Zed",
+          "damageDealt": 20708,
+          "isPlayer": false
+        },
+        {
+          "championName": "Vayne",
+          "damageDealt": 16142,
+          "isPlayer": false
+        },
+        {
+          "championName": "Briar",
+          "damageDealt": 8858,
+          "isPlayer": true
+        },
+        {
+          "championName": "Trundle",
+          "damageDealt": 7060,
+          "isPlayer": false
+        },
+        {
+          "championName": "Seraphine",
+          "damageDealt": 6631,
+          "isPlayer": false
+        }
+      ],
+      "tier": "PLATINUM",
+      "rank": "IV",
+      "leaguePoints": 37,
+      "lpChange": -21,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3247071750",
+      "timestamp": 1780192781522,
+      "championName": "Naafiri",
+      "kills": 7,
+      "deaths": 10,
+      "assists": 4,
+      "win": false,
+      "damage": 22522,
+      "matchMaxDamage": 49391,
+      "gameDuration": 2107,
+      "gameMode": "Solo/Duo",
+      "team": [
+        {
+          "championName": "Zed",
+          "damageDealt": 26744,
+          "isPlayer": false
+        },
+        {
+          "championName": "Swain",
+          "damageDealt": 23781,
+          "isPlayer": false
+        },
+        {
+          "championName": "Naafiri",
+          "damageDealt": 22522,
+          "isPlayer": true
+        },
+        {
+          "championName": "Yorick",
+          "damageDealt": 17102,
+          "isPlayer": false
+        },
+        {
+          "championName": "Jhin",
+          "damageDealt": 15530,
+          "isPlayer": false
+        }
+      ],
+      "tier": "PLATINUM",
+      "rank": "IV",
+      "leaguePoints": 37,
+      "lpChange": 0,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3247097140",
+      "timestamp": 1780195644203,
+      "championName": "Briar",
+      "kills": 15,
+      "deaths": 10,
+      "assists": 7,
+      "win": true,
+      "damage": 50254,
+      "matchMaxDamage": 63810,
+      "gameDuration": 2152,
+      "gameMode": "Solo/Duo",
+      "team": [
+        {
+          "championName": "Naafiri",
+          "damageDealt": 56600,
+          "isPlayer": false
+        },
+        {
+          "championName": "Briar",
+          "damageDealt": 50254,
+          "isPlayer": true
+        },
+        {
+          "championName": "Warwick",
+          "damageDealt": 39681,
+          "isPlayer": false
+        },
+        {
+          "championName": "Ashe",
+          "damageDealt": 38686,
+          "isPlayer": false
+        },
+        {
+          "championName": "Nami",
+          "damageDealt": 18132,
+          "isPlayer": false
+        }
+      ],
+      "tier": "PLATINUM",
+      "rank": "IV",
+      "leaguePoints": 56,
+      "lpChange": 19,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3247115048",
+      "timestamp": 1780198325172,
+      "championName": "MasterYi",
+      "kills": 0,
+      "deaths": 0,
+      "assists": 0,
+      "win": false,
+      "damage": 0,
+      "matchMaxDamage": 321,
+      "gameDuration": 74,
+      "gameMode": "Solo/Duo",
+      "team": [
+        {
+          "championName": "Kennen",
+          "damageDealt": 321,
+          "isPlayer": false
+        },
+        {
+          "championName": "Lissandra",
+          "damageDealt": 4,
+          "isPlayer": false
+        },
+        {
+          "championName": "MasterYi",
+          "damageDealt": 0,
+          "isPlayer": true
+        },
+        {
+          "championName": "Ekko",
+          "damageDealt": 0,
+          "isPlayer": false
+        },
+        {
+          "championName": "Mel",
+          "damageDealt": 0,
+          "isPlayer": false
+        }
+      ],
+      "tier": "PLATINUM",
+      "rank": "IV",
+      "leaguePoints": 56,
+      "lpChange": 0,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3247114950",
+      "timestamp": 1780198772882,
+      "championName": "Briar",
+      "kills": 3,
+      "deaths": 2,
+      "assists": 3,
+      "win": true,
+      "damage": 11848,
+      "matchMaxDamage": 31943,
+      "gameDuration": 1407,
+      "gameMode": "Solo/Duo",
+      "team": [
+        {
+          "championName": "Ahri",
+          "damageDealt": 31943,
+          "isPlayer": false
+        },
+        {
+          "championName": "Shen",
+          "damageDealt": 19601,
+          "isPlayer": false
+        },
+        {
+          "championName": "Ezreal",
+          "damageDealt": 16695,
+          "isPlayer": false
+        },
+        {
+          "championName": "Briar",
+          "damageDealt": 11848,
+          "isPlayer": true
+        },
+        {
+          "championName": "Milio",
+          "damageDealt": 3047,
+          "isPlayer": false
+        }
+      ],
+      "tier": "PLATINUM",
+      "rank": "IV",
+      "leaguePoints": 75,
+      "lpChange": 19,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3247126651",
+      "timestamp": 1780200550494,
+      "championName": "Briar",
+      "kills": 20,
+      "deaths": 9,
+      "assists": 8,
+      "win": true,
+      "damage": 48326,
+      "matchMaxDamage": 55268,
+      "gameDuration": 2144,
+      "gameMode": "Solo/Duo",
+      "team": [
+        {
+          "championName": "Briar",
+          "damageDealt": 48326,
+          "isPlayer": true
+        },
+        {
+          "championName": "Sivir",
+          "damageDealt": 34943,
+          "isPlayer": false
+        },
+        {
+          "championName": "Ornn",
+          "damageDealt": 31608,
+          "isPlayer": false
+        },
+        {
+          "championName": "Yone",
+          "damageDealt": 21481,
+          "isPlayer": false
+        },
+        {
+          "championName": "Milio",
+          "damageDealt": 6001,
+          "isPlayer": false
+        }
+      ],
+      "tier": "PLATINUM",
+      "rank": "IV",
+      "leaguePoints": 94,
+      "lpChange": 19,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3247138760",
+      "timestamp": 1780203026401,
+      "championName": "Briar",
+      "kills": 17,
+      "deaths": 4,
+      "assists": 13,
+      "win": true,
+      "damage": 41206,
+      "matchMaxDamage": 41206,
+      "gameDuration": 1781,
+      "gameMode": "Solo/Duo",
+      "team": [
+        {
+          "championName": "Briar",
+          "damageDealt": 41206,
+          "isPlayer": true
+        },
+        {
+          "championName": "Darius",
+          "damageDealt": 30764,
+          "isPlayer": false
+        },
+        {
+          "championName": "Velkoz",
+          "damageDealt": 27001,
+          "isPlayer": false
+        },
+        {
+          "championName": "AurelionSol",
+          "damageDealt": 25203,
+          "isPlayer": false
+        },
+        {
+          "championName": "Senna",
+          "damageDealt": 10467,
+          "isPlayer": false
+        }
+      ],
+      "tier": "PLATINUM",
+      "rank": "III",
+      "leaguePoints": 13,
+      "lpChange": 19,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3247153179",
+      "timestamp": 1780206032688,
+      "championName": "Khazix",
+      "kills": 11,
+      "deaths": 4,
+      "assists": 10,
+      "win": true,
+      "damage": 27871,
+      "matchMaxDamage": 61371,
+      "gameDuration": 2163,
+      "gameMode": "Solo/Duo",
+      "team": [
+        {
+          "championName": "Veigar",
+          "damageDealt": 61371,
+          "isPlayer": false
+        },
+        {
+          "championName": "Volibear",
+          "damageDealt": 45839,
+          "isPlayer": false
+        },
+        {
+          "championName": "Khazix",
+          "damageDealt": 27871,
+          "isPlayer": true
+        },
+        {
+          "championName": "Jhin",
+          "damageDealt": 16644,
+          "isPlayer": false
+        },
+        {
+          "championName": "Lulu",
+          "damageDealt": 6527,
+          "isPlayer": false
+        }
+      ],
+      "tier": "PLATINUM",
+      "rank": "III",
+      "leaguePoints": 32,
+      "lpChange": 19,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3247156808",
+      "timestamp": 1780208534238,
+      "championName": "Khazix",
+      "kills": 6,
+      "deaths": 8,
+      "assists": 6,
+      "win": false,
+      "damage": 14545,
+      "matchMaxDamage": 36025,
+      "gameDuration": 1386,
+      "gameMode": "Solo/Duo",
+      "team": [
+        {
+          "championName": "Katarina",
+          "damageDealt": 14966,
+          "isPlayer": false
+        },
+        {
+          "championName": "Khazix",
+          "damageDealt": 14545,
+          "isPlayer": true
+        },
+        {
+          "championName": "Kayn",
+          "damageDealt": 14373,
+          "isPlayer": false
+        },
+        {
+          "championName": "Kaisa",
+          "damageDealt": 9827,
+          "isPlayer": false
+        },
+        {
+          "championName": "Leona",
+          "damageDealt": 8538,
+          "isPlayer": false
+        }
+      ],
+      "tier": "PLATINUM",
+      "rank": "III",
+      "leaguePoints": 11,
+      "lpChange": -21,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3247557263",
+      "timestamp": 1780286853762,
+      "championName": "Briar",
+      "kills": 11,
+      "deaths": 14,
+      "assists": 14,
+      "win": true,
+      "damage": 37783,
+      "matchMaxDamage": 52004,
+      "gameDuration": 2078,
+      "gameMode": "Solo/Duo",
+      "team": [
+        {
+          "championName": "Senna",
+          "damageDealt": 43389,
+          "isPlayer": false
+        },
+        {
+          "championName": "Briar",
+          "damageDealt": 37783,
+          "isPlayer": true
+        },
+        {
+          "championName": "Orianna",
+          "damageDealt": 28600,
+          "isPlayer": false
+        },
+        {
+          "championName": "Lissandra",
+          "damageDealt": 26421,
+          "isPlayer": false
+        },
+        {
+          "championName": "Malphite",
+          "damageDealt": 23773,
+          "isPlayer": false
+        }
+      ],
+      "tier": "PLATINUM",
+      "rank": "III",
+      "leaguePoints": 26,
+      "lpChange": 15,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3247597182",
+      "timestamp": 1780320752125,
+      "championName": "Briar",
+      "kills": 9,
+      "deaths": 7,
+      "assists": 10,
+      "win": true,
+      "damage": 25516,
+      "matchMaxDamage": 33832,
+      "gameDuration": 1686,
+      "gameMode": "Solo/Duo",
+      "team": [
+        {
+          "championName": "Yorick",
+          "damageDealt": 29539,
+          "isPlayer": false
+        },
+        {
+          "championName": "Briar",
+          "damageDealt": 25516,
+          "isPlayer": true
+        },
+        {
+          "championName": "Vayne",
+          "damageDealt": 25194,
+          "isPlayer": false
+        },
+        {
+          "championName": "Ryze",
+          "damageDealt": 21021,
+          "isPlayer": false
+        },
+        {
+          "championName": "Pyke",
+          "damageDealt": 14202,
+          "isPlayer": false
+        }
+      ],
+      "tier": "PLATINUM",
+      "rank": "III",
+      "leaguePoints": 46,
+      "lpChange": 20,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3247751261",
+      "timestamp": 1780356587657,
+      "championName": "Naafiri",
+      "kills": 10,
+      "deaths": 5,
+      "assists": 10,
+      "win": true,
+      "damage": 17100,
+      "matchMaxDamage": 39331,
+      "gameDuration": 1796,
+      "gameMode": "Solo/Duo",
+      "team": [
+        {
+          "championName": "Akshan",
+          "damageDealt": 39331,
+          "isPlayer": false
+        },
+        {
+          "championName": "Varus",
+          "damageDealt": 31442,
+          "isPlayer": false
+        },
+        {
+          "championName": "Caitlyn",
+          "damageDealt": 19941,
+          "isPlayer": false
+        },
+        {
+          "championName": "Morgana",
+          "damageDealt": 17859,
+          "isPlayer": false
+        },
+        {
+          "championName": "Naafiri",
+          "damageDealt": 17100,
+          "isPlayer": true
+        }
+      ],
+      "tier": "PLATINUM",
+      "rank": "III",
+      "leaguePoints": 66,
+      "lpChange": 20,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3247768684",
+      "timestamp": 1780358904546,
+      "championName": "Briar",
+      "kills": 3,
+      "deaths": 8,
+      "assists": 9,
+      "win": true,
+      "damage": 23481,
+      "matchMaxDamage": 35152,
+      "gameDuration": 1827,
+      "gameMode": "Solo/Duo",
+      "team": [
+        {
+          "championName": "Gangplank",
+          "damageDealt": 35152,
+          "isPlayer": false
+        },
+        {
+          "championName": "Seraphine",
+          "damageDealt": 29904,
+          "isPlayer": false
+        },
+        {
+          "championName": "Ashe",
+          "damageDealt": 28285,
+          "isPlayer": false
+        },
+        {
+          "championName": "Briar",
+          "damageDealt": 23481,
+          "isPlayer": true
+        },
+        {
+          "championName": "Morgana",
+          "damageDealt": 16862,
+          "isPlayer": false
+        }
+      ],
+      "tier": "PLATINUM",
+      "rank": "III",
+      "leaguePoints": 86,
+      "lpChange": 20,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3247810231",
+      "timestamp": 1780363638283,
+      "championName": "Senna",
+      "kills": 8,
+      "deaths": 10,
+      "assists": 11,
+      "win": false,
+      "damage": 45845,
+      "matchMaxDamage": 68074,
+      "gameDuration": 2126,
+      "gameMode": "Solo/Duo",
+      "team": [
+        {
+          "championName": "Mel",
+          "damageDealt": 52712,
+          "isPlayer": false
+        },
+        {
+          "championName": "Senna",
+          "damageDealt": 45845,
+          "isPlayer": true
+        },
+        {
+          "championName": "Sion",
+          "damageDealt": 24727,
+          "isPlayer": false
+        },
+        {
+          "championName": "Nocturne",
+          "damageDealt": 15785,
+          "isPlayer": false
+        },
+        {
+          "championName": "Milio",
+          "damageDealt": 8561,
+          "isPlayer": false
+        }
+      ],
+      "tier": "PLATINUM",
+      "rank": "III",
+      "leaguePoints": 67,
+      "lpChange": -19,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3247829817",
+      "timestamp": 1780366400362,
+      "championName": "Briar",
+      "kills": 2,
+      "deaths": 1,
+      "assists": 2,
+      "win": true,
+      "damage": 2717,
+      "matchMaxDamage": 3420,
+      "gameDuration": 606,
+      "gameMode": "Solo/Duo",
+      "team": [
+        {
+          "championName": "Samira",
+          "damageDealt": 3420,
+          "isPlayer": false
+        },
+        {
+          "championName": "Zed",
+          "damageDealt": 3123,
+          "isPlayer": false
+        },
+        {
+          "championName": "Briar",
+          "damageDealt": 2717,
+          "isPlayer": true
+        },
+        {
+          "championName": "Mordekaiser",
+          "damageDealt": 1157,
+          "isPlayer": false
+        },
+        {
+          "championName": "Janna",
+          "damageDealt": 457,
+          "isPlayer": false
+        }
+      ],
+      "tier": "PLATINUM",
+      "rank": "III",
+      "leaguePoints": 87,
+      "lpChange": 20,
+      "notified": true
+    },
+    {
+      "matchId": "BR1_3247896970",
+      "timestamp": 1780403068275,
+      "championName": "Briar",
+      "kills": 7,
+      "deaths": 5,
+      "assists": 9,
+      "win": true,
+      "damage": 17273,
+      "matchMaxDamage": 37266,
+      "gameDuration": 1380,
+      "gameMode": "Solo/Duo",
+      "team": [
+        {
+          "championName": "Lissandra",
+          "damageDealt": 37266,
+          "isPlayer": false
+        },
+        {
+          "championName": "Lucian",
+          "damageDealt": 20946,
+          "isPlayer": false
+        },
+        {
+          "championName": "Briar",
+          "damageDealt": 17273,
+          "isPlayer": true
+        },
+        {
+          "championName": "Nami",
+          "damageDealt": 11349,
+          "isPlayer": false
+        },
+        {
+          "championName": "Gangplank",
+          "damageDealt": 11084,
+          "isPlayer": false
+        }
+      ],
+      "tier": "PLATINUM",
+      "rank": "II",
+      "leaguePoints": 8,
+      "lpChange": 21,
+      "notified": false
+    },
+    {
+      "matchId": "BR1_3247901798",
+      "timestamp": 1780405303807,
+      "championName": "Briar",
+      "kills": 0,
+      "deaths": 14,
+      "assists": 7,
+      "win": false,
+      "damage": 15036,
+      "matchMaxDamage": 53210,
+      "gameDuration": 2125,
+      "gameMode": "Solo/Duo",
+      "team": [
+        {
+          "championName": "Nilah",
+          "damageDealt": 48224,
+          "isPlayer": false
+        },
+        {
+          "championName": "Xerath",
+          "damageDealt": 30474,
+          "isPlayer": false
+        },
+        {
+          "championName": "Yone",
+          "damageDealt": 21966,
+          "isPlayer": false
+        },
+        {
+          "championName": "Lux",
+          "damageDealt": 19432,
+          "isPlayer": false
+        },
+        {
+          "championName": "Briar",
+          "damageDealt": 15036,
+          "isPlayer": true
+        }
+      ],
+      "tier": "PLATINUM",
+      "rank": "II",
+      "leaguePoints": 8,
+      "lpChange": 0,
+      "notified": false
+    },
+    {
+      "matchId": "BR1_3247909421",
+      "timestamp": 1780408125384,
+      "championName": "Briar",
+      "kills": 12,
+      "deaths": 13,
+      "assists": 15,
+      "win": false,
+      "damage": 30355,
+      "matchMaxDamage": 57861,
+      "gameDuration": 2189,
+      "gameMode": "Solo/Duo",
+      "team": [
+        {
+          "championName": "Gangplank",
+          "damageDealt": 47264,
+          "isPlayer": false
+        },
+        {
+          "championName": "Brand",
+          "damageDealt": 30558,
+          "isPlayer": false
+        },
+        {
+          "championName": "Briar",
+          "damageDealt": 30355,
+          "isPlayer": true
+        },
+        {
+          "championName": "Leblanc",
+          "damageDealt": 26716,
+          "isPlayer": false
+        },
+        {
+          "championName": "Yunara",
+          "damageDealt": 25976,
+          "isPlayer": false
+        }
+      ],
+      "tier": "PLATINUM",
+      "rank": "III",
+      "leaguePoints": 88,
+      "lpChange": -20,
+      "notified": false
+    }
+  ]
+}

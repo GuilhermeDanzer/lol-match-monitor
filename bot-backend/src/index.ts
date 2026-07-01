@@ -1,257 +1,143 @@
 import "@/loadEnv";
-import cors from "cors";
-import express from "express";
-import cron from "node-cron";
-import QRCode from "qrcode";
-import { buildHistoryResponse } from "@/lib/historyStats";
-import { ensureJourneyBackfilled } from "@/lib/journeyBackfill";
-import { ensureJourneySeeded } from "@/lib/journeySeed";
-import { ensureJourneyExists } from "@/lib/journeyStore";
-import { ensureStoreExists } from "@/lib/matchStore";
-import { sendJourneyReport, syncRankedMatches } from "@/services/monitor";
-import { getConfiguredGameName } from "@/services/riot";
+import { startHttpServer, type HttpServerHandle } from "@/http/server";
+import { connection as redis } from "@/lib/redis";
+import { prisma } from "@/prisma/client";
 import {
-  getCurrentQrId,
-  getCurrentQrString,
-  getWhatsAppStatus,
-  initWhatsAppClient,
-  resetWhatsAppSession,
-} from "@/services/whatsapp";
+  closeQueues,
+  registerCronSchedule,
+  registerReportSchedule,
+} from "@/queues";
+import { whatsappManager } from "@/whatsapp/WhatsAppManager";
+import { closeWorkers, startWorkers, type WorkerRegistry } from "@/workers";
 
-const port = Number(process.env.PORT) || 4000;
-const hostname = process.env.HOSTNAME ?? "0.0.0.0";
+/**
+ * Entry point do Worker SaaS.
+ *
+ * Processo Node.js que orquestra:
+ *   1. Prisma (Supabase / PostgreSQL).
+ *   2. Redis (via BullMQ — implícito ao instanciar Queues/Workers).
+ *   3. WhatsAppManager — reabre sessões previamente cadastradas.
+ *   4. Workers BullMQ (Cron poll+report, RiotApi).
+ *   5. CronQueue: poll Riot 15 min + relatório WhatsApp 6 h.
+ *   6. Mini-API HTTP (Express) — endpoints de controle p/ setup-UI:
+ *        GET  /api/whatsapp/:userId/status
+ *        GET  /api/whatsapp/:userId/groups
+ *        POST /api/subscriptions
+ *      O HTTP server roda no MESMO processo para compartilhar o singleton
+ *      `whatsappManager` em memória (sem RPC / IPC).
+ *
+ * Em SIGINT/SIGTERM, drena filas, fecha o HTTP, encerra sockets WA e
+ * desconecta do banco antes de sair.
+ */
 
-/** Evita crash loop por erros conhecidos do Puppeteer/Chromium no Render */
-process.on("unhandledRejection", (reason) => {
-  const message = String(
-    reason instanceof Error ? reason.message : reason,
+function requireEnv(name: string): string {
+  const value = process.env[name];
+  if (!value) {
+    throw new Error(`Variável de ambiente obrigatória ausente: ${name}`);
+  }
+  return value;
+}
+
+async function initializeActiveSessions(): Promise<number> {
+  // Só reabre sessões com creds válidas — evita gerar QR infinito para
+  // WaSession "órfãs" (resetadas / nunca pareadas).
+  const sessions = await prisma.waSession.findMany({
+    select: { userId: true, sessionData: true, user: { select: { email: true } } },
+  });
+
+  const active = sessions.filter((s) => {
+    const data = s.sessionData;
+    if (!data || typeof data !== "object") return false;
+    const creds = (data as { creds?: { registered?: boolean } }).creds;
+    return Boolean(creds?.registered);
+  });
+
+  if (active.length === 0) {
+    console.log(
+      "[boot] Nenhuma WaSession pareada — nada para reabrir. Use /dashboard/setup para conectar.",
+    );
+    return 0;
+  }
+
+  console.log(`[boot] Reabrindo ${active.length} sessão(ões) WhatsApp...`);
+
+  for (const session of active) {
+    void whatsappManager.initializeUser(session.userId).catch((err) => {
+      console.error(
+        `[boot] falha ao initializeUser(${session.userId}):`,
+        err.message,
+      );
+    });
+  }
+
+  return active.length;
+}
+
+async function bootstrap(): Promise<{
+  workers: WorkerRegistry;
+  http: HttpServerHandle;
+}> {
+  requireEnv("DATABASE_URL");
+  requireEnv("REDIS_URL");
+
+  console.log("[boot] conectando Prisma...");
+  await prisma.$connect();
+  console.log("[boot] Prisma conectado");
+
+  await initializeActiveSessions();
+
+  const workers = startWorkers();
+  await registerCronSchedule();
+  await registerReportSchedule();
+
+  const port = Number(process.env.WORKER_HTTP_PORT ?? 4000);
+  const http = startHttpServer(port);
+
+  console.log("\n✅ Worker SaaS LoL Match Monitor pronto.");
+  console.log(
+    "    Filas: lol-cron (poll 15min + report 6h) | lol-riot-api (rate-limited)",
   );
-  const name = reason instanceof Error ? reason.name : "";
-  const isPuppeteerNoise =
-    (message.includes("Protocol error") &&
-      (message.includes("Network.getResponseBody") ||
-        message.includes("Runtime.evaluate") ||
-        message.includes("Target closed"))) ||
-    name === "TargetCloseError" ||
-    message.includes("Target closed");
+  console.log(`    API HTTP: http://localhost:${port}\n`);
 
-  if (isPuppeteerNoise) {
-    console.warn("[WhatsApp] Erro Puppeteer ignorado:", message);
-    return;
-  }
-  console.error("[unhandledRejection]", reason);
-});
+  return { workers, http };
+}
 
-const app = express();
+let registry: WorkerRegistry | null = null;
+let httpServer: HttpServerHandle | null = null;
+let shuttingDown = false;
 
-const corsOrigins = process.env.CORS_ORIGIN?.split(",")
-  .map((o) => o.trim())
-  .filter(Boolean);
+async function shutdown(signal: string): Promise<void> {
+  if (shuttingDown) return;
+  shuttingDown = true;
+  console.log(`\n[shutdown] sinal ${signal} recebido — encerrando...`);
 
-function isAllowedCorsOrigin(origin: string | undefined): boolean {
-  if (!origin) return true;
-  if (!corsOrigins?.length) return true;
-  if (corsOrigins.includes(origin)) return true;
   try {
-    const host = new URL(origin).hostname;
-    return host === "localhost" || host.endsWith(".vercel.app");
-  } catch {
-    return false;
+    if (httpServer) await httpServer.close().catch(() => undefined);
+    if (registry) await closeWorkers(registry);
+    await closeQueues();
+    await whatsappManager.shutdown();
+    await prisma.$disconnect();
+    await redis.quit().catch(() => undefined);
+    console.log("[shutdown] limpo. bye!");
+    process.exit(0);
+  } catch (err) {
+    console.error("[shutdown] erro durante teardown:", err);
+    process.exit(1);
   }
 }
 
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      callback(null, isAllowedCorsOrigin(origin));
-    },
-  }),
-);
-app.use(express.json());
-
-app.get("/health", (_req, res) => {
-  res.json({ ok: true, whatsapp: getWhatsAppStatus() });
-});
-
-/** Status da conexao WhatsApp (debug) */
-app.get("/api/whatsapp/status", (_req, res) => {
-  res.json(getWhatsAppStatus());
-});
-
-/** QR atual em JSON (pagina /api/qr atualiza a imagem sem reload) */
-app.get("/api/qr/data", async (_req, res) => {
-  try {
-    const status = getWhatsAppStatus();
-    if (status.ready) {
-      res.json({ ready: true, awaitingQr: false, qrId: status.qrId });
-      return;
-    }
-
-    const qr = getCurrentQrString();
-    if (!qr) {
-      res.json({ ready: false, awaitingQr: false, qrId: status.qrId });
-      return;
-    }
-
-    const dataUrl = await QRCode.toDataURL(qr);
-    res.json({
-      ready: false,
-      awaitingQr: true,
-      qrId: getCurrentQrId(),
-      dataUrl,
-    });
-  } catch (error) {
-    const message = error instanceof Error ? error.message : "Erro desconhecido";
-    res.status(500).json({ error: message });
-  }
-});
-
-/** Limpa sessao corrompida e gera novo QR (use se o celular disser "nao foi possivel conectar") */
-app.post("/api/whatsapp/reset", async (req, res) => {
-  const expectedKey = process.env.WHATSAPP_RESET_KEY?.trim();
-  if (expectedKey && req.query.key !== expectedKey) {
-    res.status(403).json({ error: "Chave invalida. Use ?key=..." });
-    return;
-  }
-
-  try {
-    await resetWhatsAppSession();
-    res.json({
-      ok: true,
-      message: "Sessao limpa. Aguarde ~30s e abra /api/qr",
-    });
-  } catch (error) {
-    const message = error instanceof Error ? error.message : "Erro desconhecido";
-    res.status(500).json({ error: message });
-  }
-});
-
-/** QR Code WhatsApp para escaneio no navegador (Render/cloud) */
-app.get("/api/qr", async (_req, res) => {
-  try {
-    const status = getWhatsAppStatus();
-
-    if (status.ready) {
-      res
-        .status(200)
-        .type("html")
-        .send(`<!DOCTYPE html>
-<html lang="pt-BR"><head><meta charset="utf-8"><title>WhatsApp</title></head>
-<body style="font-family:system-ui,sans-serif;text-align:center;padding:2rem;background:#0a0a0a;color:#fafafa">
-<h1>WhatsApp conectado</h1>
-<p>O bot ja esta autenticado. Teste <code>!status</code> no grupo.</p>
-</body></html>`);
-      return;
-    }
-
-    res.type("html").send(`<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="utf-8">
-  <title>WhatsApp QR</title>
-</head>
-<body style="background:#0a0a0a;color:#fafafa;font-family:system-ui,sans-serif;text-align:center;padding:2rem">
-  <h1 id="title">Conectar WhatsApp</h1>
-  <p>WhatsApp &gt; Aparelhos conectados &gt; Conectar aparelho</p>
-  <p id="hint" style="color:#888;font-size:0.875rem">Aguardando QR...</p>
-  <img id="qr" alt="QR Code WhatsApp" width="320" height="320"
-    style="margin:1rem auto;border:8px solid #fff;border-radius:8px;display:none"/>
-  <p style="margin-top:1.5rem">
-    <button type="button" id="resetBtn" style="cursor:pointer;padding:0.6rem 1.2rem;font-size:1rem;border-radius:8px;border:none;background:#dc2626;color:#fff">
-      Limpar sessao e gerar novo QR
-    </button>
-  </p>
-  <script>
-  let lastQrId = null;
-
-  async function refreshQr() {
-    try {
-      const d = await (await fetch("/api/qr/data")).json();
-      if (d.ready) {
-        location.reload();
-        return;
-      }
-      if (!d.awaitingQr || !d.dataUrl) {
-        document.getElementById("hint").textContent =
-          "Chromium iniciando... aguarde o QR aparecer.";
-        document.getElementById("qr").style.display = "none";
-        return;
-      }
-      if (d.qrId !== lastQrId) {
-        lastQrId = d.qrId;
-        document.getElementById("qr").src = d.dataUrl;
-        document.getElementById("qr").style.display = "block";
-        document.getElementById("title").textContent = "Escaneie o QR Code";
-        document.getElementById("hint").textContent =
-          "QR #" + d.qrId + " — escaneie assim que aparecer (atualiza sozinho se expirar)";
-      }
-    } catch {}
-  }
-
-  document.getElementById("resetBtn").addEventListener("click", async () => {
-    document.getElementById("hint").textContent = "Limpando sessao...";
-    await fetch("/api/whatsapp/reset", { method: "POST" });
-    lastQrId = null;
-    setTimeout(refreshQr, 3000);
+bootstrap()
+  .then(({ workers, http }) => {
+    registry = workers;
+    httpServer = http;
+  })
+  .catch((err) => {
+    console.error("[boot] Falha fatal na inicialização do Worker:", err);
+    process.exit(1);
   });
 
-  refreshQr();
-  setInterval(refreshQr, 2000);
-  </script>
-</body>
-</html>`);
-  } catch (error) {
-    const message = error instanceof Error ? error.message : "Erro desconhecido";
-    console.error("[GET /api/qr]", message);
-    res.status(500).send(`Erro ao gerar QR: ${message}`);
-  }
-});
-
-/** Histórico acumulado (journey.json) para o frontend Vercel */
-app.get("/api/history", async (_req, res) => {
-  try {
-    const payload = await buildHistoryResponse(getConfiguredGameName());
-    res.json(payload);
-  } catch (error) {
-    const message =
-      error instanceof Error ? error.message : "Erro desconhecido";
-    console.error("[GET /api/history]", message);
-    res.status(500).json({ error: message });
-  }
-});
-
-async function bootstrap(): Promise<void> {
-  await ensureStoreExists();
-  await ensureJourneyExists();
-
-  void ensureJourneySeeded().catch((error) => {
-    console.warn("[seed] Erro na importacao inicial:", error);
-  });
-  void ensureJourneyBackfilled().catch((error) => {
-    console.warn("[backfill] Erro no enriquecimento inicial:", error);
-  });
-
-  initWhatsAppClient();
-
-  cron.schedule("*/15 * * * *", () => {
-    void syncRankedMatches();
-  });
-
-  cron.schedule("0 */6 * * *", () => {
-    void sendJourneyReport();
-  });
-
-  console.log("⏰ Cron 1: sincronização ranqueada a cada 15 minutos");
-  console.log("⏰ Cron 2: relatório WhatsApp a cada 6 horas");
-
-  app.listen(port, hostname, () => {
-    console.log(`\n🤖 Bot backend em http://${hostname}:${port}`);
-    console.log(`📡 API: GET /api/history | GET /api/qr | GET /api/whatsapp/status`);
-    console.log("📋 Aguardando conexão do WhatsApp...\n");
-  });
-}
-
-bootstrap().catch((error) => {
-  console.error("Falha ao iniciar bot-backend:", error);
-  process.exit(1);
+process.on("SIGINT", () => void shutdown("SIGINT"));
+process.on("SIGTERM", () => void shutdown("SIGTERM"));
+process.on("unhandledRejection", (reason) => {
+  console.error("[process] unhandledRejection:", reason);
 });

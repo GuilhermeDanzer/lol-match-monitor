@@ -20,7 +20,3 @@ export interface JourneyMatch {
   lpChange: number;
   notified: boolean;
 }
-
-export interface JourneyStore {
-  matches: JourneyMatch[];
-}

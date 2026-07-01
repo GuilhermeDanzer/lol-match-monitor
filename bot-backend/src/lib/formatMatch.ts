@@ -1,15 +1,17 @@
-import { formatDamageCompact } from "@/lib/formatDamage";
+import { formatDamageCompact, getDamageBarPercent } from "@/lib/formatDamage";
 import {
   calculateLpChange,
   formatEloCompactLabel,
   formatEloLabel,
 } from "@/lib/lpCalculator";
-import type { JourneyMatch } from "@/types/journey";
-import type { MatchMetadata, RankedSnapshot, RankedStats } from "@/types/riot";
 import {
   calculateMaxWinStreak,
   summarizeJourneyMatches,
-} from "@/lib/journeyStore";
+} from "@/lib/journeyStats";
+import type { JourneyMatch } from "@/types/journey";
+import type { MatchMetadata, RankedSnapshot, RankedStats } from "@/types/riot";
+import type { LiveGameSnapshot } from "@/types/spectator";
+import type { TeamDamageEntry } from "@/types/team";
 
 export interface MatchNotificationContext {
   displayName: string;
@@ -37,6 +39,93 @@ function formatMatchLine(match: MatchMetadata, index?: number): string {
   const dmg = formatDamageCompact(match.damage);
   const prefix = index !== undefined ? `${index}. ` : "";
   return `${prefix}${result} | ${match.championName} | ${kda} | 💥${dmg} | ${duration} | ${match.gameMode}`;
+}
+
+const WHATSAPP_BAR_WIDTH = 8;
+
+function formatWhatsAppDamageBar(damage: number, maxDamage: number): string {
+  const pct = getDamageBarPercent(damage, maxDamage);
+  const filled = Math.max(
+    damage > 0 ? 1 : 0,
+    Math.round((pct / 100) * WHATSAPP_BAR_WIDTH),
+  );
+  return `${"█".repeat(filled)}${"░".repeat(WHATSAPP_BAR_WIDTH - filled)}`;
+}
+
+/** Bloco de dano do time aliado com mini-barras horizontais (ordenado por dano). */
+export function formatTeamDamageBlock(team: TeamDamageEntry[]): string {
+  if (team.length === 0) return "";
+
+  const maxTeamDamage = Math.max(...team.map((e) => e.damageDealt), 1);
+
+  const lines = team.map((entry, index) => {
+    const bar = formatWhatsAppDamageBar(entry.damageDealt, maxTeamDamage);
+    const you = entry.isPlayer ? " ← tu" : "";
+    const name = entry.championName.padEnd(9).slice(0, 9);
+    return `${index + 1}. ${name} ${bar} ${formatDamageCompact(entry.damageDealt)}${you}`;
+  });
+
+  const teamTotal = team.reduce((sum, e) => sum + e.damageDealt, 0);
+
+  return [
+    "",
+    "💥 *Dano do time:*",
+    ...lines,
+    `📊 *Total aliado:* ${formatDamageCompact(teamTotal)}`,
+  ].join("\n");
+}
+
+/** Resposta do comando !dano — última partida com breakdown do time */
+export function formatDamageCommand(
+  match: MatchMetadata,
+  gameName: string,
+): string {
+  const result = match.win ? "🏆 Vitória" : "💀 Derrota";
+  const kda = `${match.kills}/${match.deaths}/${match.assists}`;
+  const duration = formatDuration(match.gameDuration);
+
+  return [
+    `💥 *Dano — ${gameName}*`,
+    "",
+    `📊 *Última partida:* ${result}`,
+    `🎮 *Campeão:* ${match.championName}`,
+    `🗡️ *KDA:* ${kda}`,
+    `⏱️ *Duração:* ${duration}`,
+    formatTeamDamageBlock(match.team),
+  ].join("\n");
+}
+
+/** Resposta do comando !live — partida em andamento */
+export function formatLiveGameCommand(
+  displayName: string,
+  live: LiveGameSnapshot,
+): string {
+  const elapsed = formatDuration(live.elapsedSeconds);
+
+  return [
+    `🟢 *AO VIVO — ${displayName}*`,
+    "",
+    `🎮 *Campeão:* ${live.playerChampion}`,
+    `⏱️ *Tempo de jogo:* ${elapsed}`,
+    `🎯 *Modo:* ${live.queueLabel}`,
+    "",
+    "👥 *Time:*",
+    live.allies.length > 0 ? live.allies.join(", ") : "—",
+    "",
+    "⚔️ *Inimigos:*",
+    live.enemies.length > 0 ? live.enemies.join(", ") : "—",
+    "",
+    "_KDA e dano só aparecem depois da partida. Use !status ou !dano._",
+  ].join("\n");
+}
+
+/** Mensagem quando não está em partida */
+export function formatNotInGameCommand(displayName: string): string {
+  return [
+    `⚪ *${displayName}* não está em partida agora.`,
+    "",
+    "_Use !status para a última ranqueada ou !dano para o breakdown de dano._",
+  ].join("\n");
 }
 
 /** Resposta do comando !status — última partida */
@@ -74,14 +163,17 @@ export function formatHistoryCommand(
   }
 
   const wins = matches.filter((m) => m.win).length;
-  const lines = matches.map((m, i) => formatMatchLine(m, i + 1));
+  const blocks = matches.flatMap((m, i) => [
+    formatMatchLine(m, i + 1),
+    formatTeamDamageBlock(m.team),
+    "",
+  ]);
 
   return [
     `⚔️ *Histórico — ${gameName}*`,
     `📈 Últimas ${matches.length}: ${wins}V / ${matches.length - wins}D`,
     "",
-    ...lines,
-    "",
+    ...blocks,
     "_V=Vitória D=Derrota | Use !status ou !lol para a partida mais recente._",
   ].join("\n");
 }
@@ -93,13 +185,15 @@ export function formatHelpCommand(gameName: string): string {
     "",
     `👤 Monitorando: *${gameName}*`,
     "",
-    "*!status* / *!lol* — última partida + elo, PDL, win rate e partidas nas últimas 6h",
-    "*!historico* / *!history* — últimas 5 partidas ranqueadas",
+    "*!status* / *!lol* — última partida + elo, PDL, win rate, dano do time e partidas nas últimas 6h",
+    "*!live* / *!partida* / *!ingame* — partida ao vivo (Spectator)",
+    "*!dano* — breakdown de dano do time na última partida",
+    "*!historico* / *!history* — últimas 5 partidas ranqueadas com dano do time",
     "*!jornada* — estatísticas gerais da temporada monitorada",
     "*!site* — link do dashboard web ao vivo",
     "*!ajuda* / *!help* — esta mensagem",
     "",
-    "O bot envia um *resumo automático a cada 6 horas* com as partidas ranqueadas do período.",
+    "_Relatório automático a cada 6 horas quando houver partidas novas. Comandos !status respondem na hora._",
   ].join("\n");
 }
 
@@ -186,6 +280,8 @@ export function formatExtendedWhatsAppMessage(
       );
     }
   }
+
+  lines.push(formatTeamDamageBlock(match.team));
 
   return lines.join("\n");
 }

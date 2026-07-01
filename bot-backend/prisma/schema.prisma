@@ -1,0 +1,84 @@
+// =============================================================================
+// LoL Match Monitor — SaaS Worker schema
+//
+// Banco: Supabase / PostgreSQL via Prisma.
+// Esse schema modela APENAS o backend Worker (sem UI, sem auth web).
+// =============================================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// Dono do bot — cada usuário conecta seu próprio WhatsApp.
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  waSession     WaSession?
+  subscriptions Subscription[]
+
+  @@map("users")
+}
+
+/// Estado de autenticação Baileys (creds + Signal keys) por usuário.
+/// Substitui o `useMultiFileAuthState` em disco — tudo vai em JSONB.
+model WaSession {
+  id          String   @id @default(cuid())
+  userId      String   @unique @map("user_id")
+  sessionData Json     @default("{}") @map("session_data")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("wa_sessions")
+}
+
+/// Jogador rastreado — entidade global, deduplicada por PUUID.
+/// eloSnapshot guarda estado mutável (tier/rank/lp/lastMatchId/gameName/tagLine/updatedAt)
+/// em JSONB, evitando schema rígido a cada novo campo Riot.
+model TrackedPlayer {
+  id           String   @id @default(cuid())
+  puuid        String   @unique
+  riotId       String   @unique @map("riot_id") // canonical "gameName#tagLine"
+  eloSnapshot  Json     @default("{}") @map("elo_snapshot")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  subscriptions Subscription[]
+
+  @@map("tracked_players")
+}
+
+/// Pivot: qual usuário recebe alertas de qual TrackedPlayer em qual grupo WA.
+model Subscription {
+  id              String   @id @default(cuid())
+  userId          String   @map("user_id")
+  trackedPlayerId String   @map("tracked_player_id")
+  whatsappGroupId String   @map("whatsapp_group_id")
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  trackedPlayer TrackedPlayer @relation(fields: [trackedPlayerId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, trackedPlayerId, whatsappGroupId])
+  @@index([trackedPlayerId])
+  @@map("subscriptions")
+}
+
+/// Cache imutável de detalhes Match-V5 — compartilhado entre todos os tenants.
+model MatchCache {
+  id       String   @id @default(cuid())
+  matchId  String   @unique @map("match_id")
+  data     Json
+  cachedAt DateTime @default(now()) @map("cached_at")
+
+  @@map("match_cache")
+}

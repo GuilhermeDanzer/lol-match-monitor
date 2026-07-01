@@ -94,7 +94,7 @@ Abra `http://localhost:4000/api/qr` ou escaneie o QR no terminal.
 
 **Erro comum:** `Failed to fetch` = URL errada, backend dormindo (Render free) ou CORS. Não é falha de build do Next se o deploy ficou verde.
 
-**Partidas vazias no dashboard:** o histórico fica em `journey.json` no servidor (não vai no Git). No primeiro acesso o backend importa as últimas ~30 partidas da Riot automaticamente; a primeira carga pode levar 15–30s. No Render free os dados somem se o serviço for recriado sem disco persistente.
+**Partidas vazias no dashboard:** o histórico fica em `data/journey.db` (SQLite) no servidor (não vai no Git). No primeiro start, se existir `journey.json` legado, os dados são importados automaticamente. No primeiro acesso sem banco, o backend importa as últimas ~30 partidas da Riot; a primeira carga pode levar 15–30s. No Render free os dados somem se o serviço for recriado sem disco persistente.
 
 ---
 

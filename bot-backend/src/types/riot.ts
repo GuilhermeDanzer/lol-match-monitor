@@ -63,6 +63,8 @@ export interface MatchDetailResponse {
     gameCreation: number;
     gameDuration: number;
     gameMode: string;
+    queueId?: number;
+    gameEndedInEarlySurrender?: boolean;
     participants: MatchParticipant[];
   };
 }
