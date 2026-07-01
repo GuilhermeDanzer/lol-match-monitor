@@ -329,12 +329,29 @@ export class WhatsAppManager {
       }
 
       if (connection === "close") {
-        const statusCode = (lastDisconnect?.error as Boom | undefined)?.output
-          ?.statusCode;
+        const disconnectError = lastDisconnect?.error as Boom | undefined;
+        const statusCode = disconnectError?.output?.statusCode;
+        const errMessage =
+          disconnectError?.message ??
+          (disconnectError as Error | undefined)?.message ??
+          "";
         const loggedOut = statusCode === DisconnectReason.loggedOut;
+        const bufferCorruption = errMessage.includes(
+          "must be an instance of Buffer",
+        );
 
         this.sockets.delete(userId);
         this.readyUsers.delete(userId);
+
+        if (bufferCorruption) {
+          console.error(
+            `[wa:${userId}] sessão corrompida (chaves Signal como string) — resetando para novo QR`,
+          );
+          void this.resetSession(userId).catch((err) =>
+            console.error(`[wa:${userId}] reset pós-corruption falhou:`, err),
+          );
+          return;
+        }
 
         if (loggedOut) {
           console.warn(

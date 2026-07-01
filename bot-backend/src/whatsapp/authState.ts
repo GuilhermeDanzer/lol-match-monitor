@@ -47,9 +47,82 @@ function stringifyJson(value: unknown): unknown {
   return JSON.parse(JSON.stringify(value, BufferJSON.replacer), BufferJSON.reviver);
 }
 
+function isSessionJsonString(value: string): boolean {
+  return value.startsWith("[") || value.startsWith("{");
+}
+
+/** Base64 de chave binária (noise, sender-key, etc.) — não confundir com JSON textual. */
+function looksLikeBase64Buffer(value: string): boolean {
+  if (value.length < 4) return false;
+  if (isSessionJsonString(value)) return false;
+  return /^[A-Za-z0-9+/]+=*$/.test(value);
+}
+
+function coerceToBuffer(value: unknown): Buffer | unknown {
+  if (Buffer.isBuffer(value) || value instanceof Uint8Array) return value;
+
+  if (typeof value === "object" && value !== null) {
+    const obj = value as { type?: string; data?: unknown };
+    if (obj.type === "Buffer" && obj.data !== undefined) {
+      return BufferJSON.reviver("", value) as Buffer;
+    }
+  }
+
+  if (typeof value === "string" && looksLikeBase64Buffer(value)) {
+    return Buffer.from(value, "base64");
+  }
+
+  return value;
+}
+
+type KeyPairLike = { public: Buffer; private: Buffer };
+
+function normalizeKeyPair(value: unknown): KeyPairLike | undefined {
+  if (!value || typeof value !== "object") return undefined;
+  const pair = value as Record<string, unknown>;
+  return {
+    ...(pair as KeyPairLike),
+    public: coerceToBuffer(pair.public) as Buffer,
+    private: coerceToBuffer(pair.private) as Buffer,
+  };
+}
+
 /**
- * Repara chaves salvas com serialização antiga (Buffer virou string base64 pura).
- * O Baileys grava sender-key como `Buffer.from(JSON.stringify(...))`.
+ * Repara creds onde `noiseKey`/`signedPreKey` etc. viraram string base64 no JSONB.
+ * Campos string legítimos (`advSecretKey`, `myAppStateKeyId`) são preservados.
+ */
+function normalizeCreds(creds: AuthenticationCreds): AuthenticationCreds {
+  const next = { ...creds };
+
+  if (next.noiseKey) {
+    next.noiseKey = normalizeKeyPair(next.noiseKey) ?? next.noiseKey;
+  }
+  if (next.pairingEphemeralKeyPair) {
+    next.pairingEphemeralKeyPair =
+      normalizeKeyPair(next.pairingEphemeralKeyPair) ??
+      next.pairingEphemeralKeyPair;
+  }
+  if (next.signedIdentityKey) {
+    next.signedIdentityKey =
+      normalizeKeyPair(next.signedIdentityKey) ?? next.signedIdentityKey;
+  }
+  if (next.signedPreKey) {
+    next.signedPreKey = {
+      ...next.signedPreKey,
+      keyPair:
+        normalizeKeyPair(next.signedPreKey.keyPair) ?? next.signedPreKey.keyPair,
+      signature: coerceToBuffer(next.signedPreKey.signature) as Buffer,
+    };
+  }
+  if (next.routingInfo !== undefined && next.routingInfo !== null) {
+    next.routingInfo = coerceToBuffer(next.routingInfo) as Buffer;
+  }
+
+  return next;
+}
+
+/**
+ * Repara chaves Signal salvas com serialização antiga (Buffer virou string base64 pura).
  */
 function normalizeStoredKeyValue(value: unknown): unknown {
   if (value === null || value === undefined) return value;
@@ -60,24 +133,23 @@ function normalizeStoredKeyValue(value: unknown): unknown {
     if (obj.type === "Buffer" && obj.data !== undefined) {
       return BufferJSON.reviver("", value);
     }
-    return value;
+    if (Array.isArray(value)) {
+      return value.map(normalizeStoredKeyValue);
+    }
+    const out: Record<string, unknown> = {};
+    for (const [key, nested] of Object.entries(value as Record<string, unknown>)) {
+      if (key === "public" || key === "private" || key === "signature") {
+        out[key] = coerceToBuffer(nested);
+      } else {
+        out[key] = normalizeStoredKeyValue(nested);
+      }
+    }
+    return out;
   }
 
   if (typeof value === "string") {
-    // Já é JSON textual — SessionRecord / objetos legados.
-    if (value.startsWith("[") || value.startsWith("{")) {
-      return value;
-    }
-    // String base64 de Buffer UTF-8 (bug de serialização anterior).
-    try {
-      const buf = Buffer.from(value, "base64");
-      const text = buf.toString("utf-8");
-      if (text.startsWith("[") || text.startsWith("{")) {
-        return buf;
-      }
-    } catch {
-      // não é base64 válido
-    }
+    if (isSessionJsonString(value)) return value;
+    if (looksLikeBase64Buffer(value)) return Buffer.from(value, "base64");
   }
 
   return value;
@@ -99,7 +171,7 @@ function normalizeKeyStore(keys: KeyStore): KeyStore {
 function parseBlob(raw: unknown): SessionBlob {
   if (!raw || typeof raw !== "object") return emptyBlob();
   const data = reviveJson<Partial<SessionBlob>>(raw);
-  const creds = data.creds ?? initAuthCreds();
+  const creds = normalizeCreds(data.creds ?? initAuthCreds());
   const keys = normalizeKeyStore((data.keys as KeyStore) ?? {});
   return { creds, keys };
 }
